@@ -46,7 +46,7 @@ void testcolon(int argc,char **argv)
 
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
-	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
+	ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 	test.writeImage(*initial);
 
 
