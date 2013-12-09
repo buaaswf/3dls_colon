@@ -17,7 +17,7 @@ void testcolon(int argc,char **argv)
 	char *pt="single_well";
 	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
 	RawImage test;
-	short * indata=test.readStream("K:\\sdf\\volume\\clean\\WI_3110_S_iso_clean.raw",&l,&m,&n);
+	short * indata=test.readStream("K:\\sdf\\volume\\clean\\WI_3032_P_iso_clean.raw",&l,&m,&n);
 	Raw *initial=new Raw(l,m,n);
 	float *inputo=new float[l*m*n];
 	for (int i = 0; i < l*m*n; i++)
@@ -27,7 +27,7 @@ void testcolon(int argc,char **argv)
 
 	Raw *input=new Raw(l,m,n,inputo);
 	Filter *f=new Filter();
-	input=f->guass3DFilter(input,3);
+	//input=f->guass3DFilter(input,3);
 	RawImage *write=new RawImage();
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
 	ls->initialg(*input);
@@ -49,7 +49,7 @@ void testcolon(int argc,char **argv)
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 	Raw temp(*initial);
-	ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,20,pt);
+	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,20,pt);
 	//*initial -=temp;
 	//for (int i = 0; i < l * m * n; i++)
 	//{
@@ -73,14 +73,35 @@ void evaluate()
 {
 	int l=512,m=512,n=570;
 	RawImage test;
-	float * indata1=test.readStreamfloat("K:\\3Dlevelcolonouterwall3119pphysiceqution.raw",&l,&m,&n);
+	float * indata1=test.readStreamfloat("K:\\3Dlevelcolonpe3119iter20.raw",&l,&m,&n);
 	float * indata2=test.readStreamfloat("K:\\3Dlevelcolon3119p.raw",&l,&m,&n);
-	for (int i = 0; i < l*m*n; i++)
+	for ( int k = 0; k < n; k++ )
 	{
-		indata1[i] -= indata2[i];
+		for ( int j = 0; j < m; j++)
+		{
+			for ( int i = 0; i < l; i++)
+			{
+				PIXTYPE *val=&indata1[k*m*l+j*l+i];
+				if(i<409 &&i> 107 && j>156 &&j <390)
+				{
+					if (*val>1)
+					{
+						*val=0;
+
+					}
+					else *val=100;
+				}
+				else *val=0;
+				*val -= indata2[ k*m*l + j*l + i];
+			}
+		}
 	}
+	//for (int i = 0; i < l*m*n; i++)
+	//{
+	//	indata1[i] -= indata2[i];
+	//}
 	FILE *p;
-	p=fopen("K:\\3Dlevelcolon3119thickness.raw","wb");
+	p=fopen("K:\\3Dlevelcolon3119thicknessiter20.raw","wb");
 	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
 	fclose(p);
 	fflush(stdout);

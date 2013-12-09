@@ -198,10 +198,37 @@ Raw  Dirac( Raw & x, double sigma )
 
 	return ret.set_shared(true);
 }
-
+Raw sin(Raw & src)
+{
+	for (int i = 0; i < src.getXsize(); i++)
+	{
+		for (int j = 0; j < src.getYsize(); j++)
+		{
+			for (int k = 0; k < src.getZsize(); k++)
+			{
+				src.put( i, j, k, sin(src.get( i, j ,k)));
+			}
+		}
+	}
+	return src;
+}
 Raw distReg_p2( Raw  &phi ) 
 {
-	throw std::exception("The method or operation is not implemented.");
+	ThreeDim_LevelSet *ls;
+		int m=phi.getXsize();
+		int n=phi.getYsize();
+		Raw phi_x(gradientxgc(phi));
+		Raw phi_y(gradientygc(phi));
+		Raw phi_z(gradientzgc(phi));
+		Raw s(ls->ImageFSqrt(phi_x,phi_y,phi_z));
+		Raw &a=regFunction(s,0,1);
+		Raw &b=regFunction(s,1,10);//need to be changed.
+		Raw &ps=a*(sin((s*2.0*pi)))/(2.0*pi)+b*(s-1);
+		Raw &dps=((regFunction(ps,0,0)*(-1)+1)*ps+regFunction(ps,0,0))/((regFunction(s,0,0)*(-1)+1)*s+regFunction(s,0,0));
+		Raw &div2=div(dps*phi_x-phi_x,dps*phi_y-phi_y,dps*phi_z-phi_z);
+		Raw &f=div2-del2(phi)*4.0;
+		return f;
+
 }
 void ThreeDim_LevelSet::initialg(Raw &g)
 {
@@ -223,11 +250,6 @@ Raw ThreeDim_LevelSet::minimal_surface(Raw &phi,Raw &g,double lambda,double mu,d
 	Raw vx=gradientxgc(g);
 	Raw vy=gradientygc(g);
 	Raw vz=gradientzgc(g);
-
-	//Raw curvature;
-	//CImg <double> sourceimage(phi.getXsize(),phi.getYsize(),1,1,0);
-	//CImg <double> sourceimage(phi.getXsize(),phi.getYsize(),phi.getZsize(),1,0);
-	//CImgDisplay disp(256,256,"",1);
 	for(int i=0;i<iter;i++)
 	{
 		float smallNumber=1e-10;
@@ -273,50 +295,8 @@ Raw ThreeDim_LevelSet::minimal_surface(Raw &phi,Raw &g,double lambda,double mu,d
 
 		phi += (distRegTerm)*mu*((double)timestep);
 		phi += phi_x;
-		//if (i=iter-1)
-		//{
-		//	distRegTerm = (del2(phi) *= 6.0) -= curvature;
-		//	phi +=distRegTerm;
-
-		//}//test for
-		//IShowraw(volumeTerm,1,&p1);
-		//phi=phi +(distRegTerm)*mu* double(timestep) +(areaTerm)*lambda + (volumeTerm)*alfa;
-		//IShowraw(phi,1,&potentialFunction);
 		cout<<"iterator i="<<i<<endl;
-		//if (i==iter-1)
-		//{
-		//	IShowraw(distRegTerm,1,&potentialFunction);
-		//	//IShowraw(g,1,&potentialFunction);
-		//}
-
-
-		//cimg_for_insideXYZ(sourceimage,x,y,z,0)
-		//{
-		//	PIXTYPE val=phi.get(x,y,z);
-		//	if (val>0&&val<1)
-		//	{
-		//		sourceimage(x,y,z,0)=(double)(val);
-		//	}
-		//	else if (val>=1)
-		//	{
-		//		sourceimage(x,y,z,0)=(double)(1);
-		//	}
-
-		//}
-		//sourceimage.display(disp.wait(200));
-		/*delete phi_x;
-		delete phi_y;
-		delete phi_z;*/
 	}	
-	//IShowImg(*diracPhi);
-	//IShowraw(areaTerm,1,&potentialFunction);
-	//IShowImg(*areaTerm);
-	//initialg(phi);
-	//IShowImg(*phi);
-	//IShowraw(curvature,1,&potentialFunction);
-	//delete vx;
-	//delete vy;
-	//delete vz;
 	return phi;
 }
 Raw outwallpull(Raw &src)
@@ -359,6 +339,7 @@ void ThreeDim_LevelSet::outerwall(Raw &phi,Raw &g,double lambda,double mu,double
 	{
 		phi = this->minimal_surface(phi,pull+g,lambda,mu,-10,epsilon,timestep,1,potentialFunction)+\
 			this->minimal_surface(phi,g,lambda,mu,-alfa,epsilon,timestep,1,potentialFunction);
+		
 		cout << "outer wall iter = " << i <<endl;
 	}
 

@@ -44,7 +44,7 @@ float * RawImage::readStreamfloat(char const *filename,int *l,int * m,int  * n)
 	//file.read(reinterpret_cast<char *>(&lx),sizeof(int));
 	//file.read(reinterpret_cast<char *>(&ly),sizeof(int));
 	//file.read(reinterpret_cast<char *>(&lz),sizeof(int));
-	int size=*l**m**n*sizeof(short);
+	int size=*l**m**n*sizeof(float);
 	//*l=lx;*m=ly;*n=lz;
 	float *buf=new float[size];
 	file.read((char *)buf,size);
@@ -162,26 +162,26 @@ void RawImage::writeImage(Raw &destImg)
 {
 	FILE *p=fopen("K:\\3Dlevelcolon.raw","wb");
 	PIXTYPE *data=(PIXTYPE *)destImg.getdata();
-	//for (int i=0;i<destImg.getZsize();i++)
-	//{
-	//	for (int j=0;j<destImg.getYsize();j++)
-	//	{
-	//		for (int k=0;k<destImg.getXsize();k++)
-	//		{
-	//			PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
-	//			if(k<409 &&k> 107 && j>156 &&j <390)
-	//			{
-	//				if (*val>1)
-	//				{
-	//					*val=0;
+	for (int i=0;i<destImg.getZsize();i++)
+	{
+		for (int j=0;j<destImg.getYsize();j++)
+		{
+			for (int k=0;k<destImg.getXsize();k++)
+			{
+				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
+				if(k<409 && k> 107 && j>156 &&j <390)
+				{
+					if (*val>1)
+					{
+						*val=0;
 
-	//				}
-	//				else *val=100;
-	//			}
-	//			else *val=0;
-	//		}
-	//	}
-	//}
+					}
+					else *val=100;
+				}
+				else *val=0;
+			}
+		}
+	}
 	fwrite(data, sizeof(PIXTYPE), destImg.size(), p);
 	fclose(p);
 	fflush(stdout);
