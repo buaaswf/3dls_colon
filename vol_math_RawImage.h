@@ -35,6 +35,7 @@ public:
 	void readImage( unsigned char * buf,char const *file ,int size);
 	void readImagesi(short  * buf,char const *file ,int size);
 	short * readStream(char const *file,int *l,int *m,int * n);
+	float * readStreamfloat(char const *filename,int *l,int * m,int  * n);
 	void writeImagecolon(Raw& destImg);
 	void writeImage(Raw& destImg);
 	void writeImagesesmic(Raw &destImg);

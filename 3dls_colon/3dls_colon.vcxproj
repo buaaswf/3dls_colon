@@ -75,7 +75,6 @@
     <ClInclude Include="..\WipeNioisePde.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Filter.cpp" />
     <ClCompile Include="..\image.cpp" />
     <ClCompile Include="..\main (2).cpp" />
     <ClCompile Include="..\main.cpp" />

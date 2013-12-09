@@ -26,6 +26,8 @@ void testcolon(int argc,char **argv)
 	}
 
 	Raw *input=new Raw(l,m,n,inputo);
+	Filter *f=new Filter();
+	input=f->guass3DFilter(input,3);
 	RawImage *write=new RawImage();
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
 	ls->initialg(*input);
@@ -46,15 +48,50 @@ void testcolon(int argc,char **argv)
 
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
-	ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
+	Raw temp(*initial);
+	ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,20,pt);
+	//*initial -=temp;
+	//for (int i = 0; i < l * m * n; i++)
+	//{
+	//	//int count=0;
+	//	//PIXTYPE * a=initial->getdata();
+	//	//if (a[i]!=0)
+	//	//{
+	//	//	//cout << a[i] <<endl;
+	//	//	
+	//	//} 
+	//	//else
+	//	//{
+	//	//}
+	//}
 	test.writeImage(*initial);
 
 
 }
 
+void evaluate()
+{
+	int l=512,m=512,n=570;
+	RawImage test;
+	float * indata1=test.readStreamfloat("K:\\3Dlevelcolonouterwall3119pphysiceqution.raw",&l,&m,&n);
+	float * indata2=test.readStreamfloat("K:\\3Dlevelcolon3119p.raw",&l,&m,&n);
+	for (int i = 0; i < l*m*n; i++)
+	{
+		indata1[i] -= indata2[i];
+	}
+	FILE *p;
+	p=fopen("K:\\3Dlevelcolon3119thickness.raw","wb");
+	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
+	fclose(p);
+	fflush(stdout);
+	delete [] indata1;
+	delete [] indata2;
+
+}
 int main(int argc,char **argv)
 {
 	testcolon(argc,argv);
+	//evaluate();
 	system("pause");
 	return 0;
 }
