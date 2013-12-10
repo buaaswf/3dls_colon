@@ -76,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\image.cpp" />
-    <ClCompile Include="..\main (2).cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\main2d.cpp" />
     <ClCompile Include="..\ThreeDim_LevelSet.cpp" />

@@ -169,7 +169,38 @@ void RawImage::writeImage(Raw &destImg)
 			for (int k=0;k<destImg.getXsize();k++)
 			{
 				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
-				if(k<409 && k> 107 && j>156 &&j <390)
+				if(k*k+j*j<285)//k<409 && k> 107 && j>156 &&j <390
+				{
+					if (*val>1)
+					{
+						*val=0;
+
+					}
+					else *val=100;
+				}
+				else *val=0;
+			}
+		}
+	}
+	fwrite(data, sizeof(PIXTYPE), destImg.size(), p);
+	fclose(p);
+	fflush(stdout);
+
+	delete[] data;
+	printf("write is ok");
+}
+void RawImage::writeImageName(Raw &destImg, char *name)
+{
+	FILE *p=fopen(name,"wb");
+	PIXTYPE *data=(PIXTYPE *)destImg.getdata();
+	for (int i=0;i<destImg.getZsize();i++)
+	{
+		for (int j=0;j<destImg.getYsize();j++)
+		{
+			for (int k=0;k<destImg.getXsize();k++)
+			{
+				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
+				if((k-256)*(k-256)+(j-256)*(j-256)<256*256-3*3)//k<409 && k> 107 && j>156 &&j <390
 				{
 					if (*val>1)
 					{
