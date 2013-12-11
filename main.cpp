@@ -78,7 +78,7 @@ void GetFileNameFromDir(string strDir,vector<string>& vFileDirList)
 #endif
 }
 
-void evaluate(string dir);
+void evaluate(string dir,int l ,int m,int n);
 void testcolon(int argc,string dir)
 {
 	
@@ -135,12 +135,12 @@ void testcolon(int argc,string dir)
 	strcat(outdir2,dirbody);
 	strcat(outdir2,outname2);
 	test.writeImageName(*initial,outdir2);
-	evaluate(dir);
+	evaluate(dir,l,m,n);
 }
 
-void evaluate(string dir)
+void evaluate(string dir,int l,int m,int n)
 {
-	int l=512,m=512,n=570;
+	//int l=512,m=512,n=570;
 	RawImage test;
 	char dst[100];
 	strcpy(dst,dir.c_str());
@@ -191,9 +191,24 @@ void evaluate(string dir)
 	delete [] indata2;
 
 }
+
+void pvalue(int [])
+{
+	//int l=512,m=512,n=570;
+	//RawImage test;
+	//char dst[100];
+	//strcpy(dst,dir.c_str());
+	//char dir2[200]="D:\\sdfdata\\";
+	//strcat(dir2,dst);
+	//char dir3[300];
+	//strcpy(dir3,dir2);
+	//strcat(dir3,"outer.raw");
+	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+
+}
 int main(int argc,char **argv)
 {
-	string dir("K:\\sdf\\volume\\clean\\clean\\test");
+	string dir("K:\\sdf\\volume\\clean\\clean\\ep\\");//K:\sdf\volume\clean\clean\ep//
 	vector<string> files;
 	GetFileNameFromDir(dir,files);
 	vector<string>::iterator iterFile;
