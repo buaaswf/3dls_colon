@@ -192,7 +192,9 @@ void RawImage::writeImage(Raw &destImg)
 void RawImage::writeImageName(Raw &destImg, char *name)
 {
 	FILE *p=fopen(name,"wb");
-	PIXTYPE *data=(PIXTYPE *)destImg.getdata();
+	PIXTYPE *data=new PIXTYPE[destImg.size()];
+		memcpy(data,destImg.getdata(),sizeof(PIXTYPE)*destImg.size());
+	
 	for (int i=0;i<destImg.getZsize();i++)
 	{
 		for (int j=0;j<destImg.getYsize();j++)

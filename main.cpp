@@ -85,10 +85,12 @@ void testcolon(int argc,string dir)
 	char *pt="single_well";
 	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
 	RawImage test;
-	char *dirhead="K:\\sdf\\volume\\clean\\clean\\test";
-	char *dirbody;
+	char dirhead[200]="K:\\sdf\\volume\\clean\\clean\\ep\\";
+	char dirbody[100];
 	strcpy(dirbody,dir.c_str());
+	cout <<"dirbody"<<dirbody<<endl;
 	strcat(dirhead,dirbody);
+	cout << "dirhead" << dirhead<< endl;
 	short * indata=test.readStream(dirhead,&l,&m,&n);
 	Raw *initial=new Raw(l,m,n);
 	float *inputo=new float[l*m*n];
@@ -121,19 +123,18 @@ void testcolon(int argc,string dir)
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 	char *outname1="inner.raw";
-	char *outdir="D:\\sdfdata\\";
+	char outdir[200]="D:\\sdfdata\\";
 	strcat(outdir,dirbody);
 	strcat(outdir,outname1);
 	test.writeImageName(*initial,outdir);
-	Raw temp(*initial);
-	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
+	//Raw temp(*initial);
+	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,5,pt);
 	//*initial -=temp;
 	char *outname2="outer.raw";
-	char *outdir="D:\\sdfdata\\";
-	strcpy(outdir,dirbody);
-	strcat(outdir,outname2);
-	test.writeImageName(*initial,outdir);
-
+	char outdir2[200]="D:\\sdfdata\\";
+	strcat(outdir2,dirbody);
+	strcat(outdir2,outname2);
+	test.writeImageName(*initial,outdir2);
 	evaluate(dir);
 }
 
@@ -141,15 +142,15 @@ void evaluate(string dir)
 {
 	int l=512,m=512,n=570;
 	RawImage test;
-	char *dst;
+	char dst[100];
 	strcpy(dst,dir.c_str());
-	char *dir2="D:\\sdfdata\\";
+	char dir2[200]="D:\\sdfdata\\";
 	strcat(dir2,dst);
-	char *dir3;
+	char dir3[300];
 	strcpy(dir3,dir2);
 	strcat(dir3,"outer.raw");
 	float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
-	char *dir4;
+	char dir4[300];
 	strcpy(dir4,dir2);
 	strcat(dir4,"inner.raw");
 	float * indata2=test.readStreamfloat(dir4,&l,&m,&n);
@@ -179,7 +180,7 @@ void evaluate(string dir)
 	//	indata1[i] -= indata2[i];
 	//}
 	FILE *p;
-	char *dir5;
+	char dir5[300];
 	strcpy(dir5,dir2);
 	strcat(dir5,"thickness.raw");
 	p=fopen(dir5,"wb");
@@ -198,7 +199,7 @@ int main(int argc,char **argv)
 	vector<string>::iterator iterFile;
 	for (iterFile=files.begin();iterFile!=files.end();iterFile++)
 	{
-		iterFile->assign(iterFile->substr(35));
+		iterFile->assign(iterFile->substr(dir.size()+1));
 		cout<<*iterFile <<endl;
 		testcolon(argc,*iterFile);
 	}
