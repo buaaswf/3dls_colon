@@ -1,6 +1,6 @@
 #include "vol_math_RawImage.h"
 #include <cassert>
-
+#include <map>
 //#include"vol_math_Raw3D_Independt.h"
 /*
 RawImage is to change the all the three data types to double or float
@@ -202,7 +202,7 @@ void RawImage::writeImageName(Raw &destImg, char *name)
 			for (int k=0;k<destImg.getXsize();k++)
 			{
 				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
-				if((k-256)*(k-256)+(j-256)*(j-256)<256*256-3*3)//k<409 && k> 107 && j>156 &&j <390
+				if((k-256)*(k-256)+(j-256)*(j-256)<256*256-20*20)//k<409 && k> 107 && j>156 &&j <390
 				{
 					if (*val>1)
 					{
@@ -407,4 +407,52 @@ void RawArray::wipecopy(RawArray& src) {
 	for(k=0; k< kmax; k++) {		// copy each field;
 		z[k].wipecopy(&(src.z[k]));
 	}
+}
+
+
+///////////////////////////////////queue///////////////////////////////////////
+
+Queue::Queue()
+{
+	head=-1;
+	rear=-1;
+}
+Queue::~Queue()
+{
+
+}
+QueueData Queue::front()
+{
+	QueueData ret;
+	return ret;
+
+}
+
+void Queue::push(QueueData var)
+{
+	points [ ++rear ] = var;
+	if (rear == 0)
+	{
+		head = 0;
+	}
+}
+
+void Queue::pop()
+{
+	++head;
+}
+bool Queue::isEmpty()
+{
+	bool flag = head >rear;
+	if (head == -1 && rear == -1)
+		flag = true;
+	if (flag)
+	{
+		head = rear = -1;
+	}
+	return flag;
+}
+bool Queue::isFull()
+{
+	return rear == 100000-1;
 }

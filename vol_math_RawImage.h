@@ -441,4 +441,29 @@ public:				//---------------init fcns-------------
 
 
 };
+struct QueueData
+{
+	int x,
+		y,
+		z;
+	PIXTYPE val;
+
+};
+class Queue
+{
+private:
+	QueueData * points;
+	int head,
+		rear;
+public:
+	Queue();
+	~Queue();
+	void push (QueueData var);
+	void pop  ();
+	QueueData front();
+	bool isEmpty();
+	bool isFull();
+
+
+};
 #endif

@@ -340,7 +340,7 @@ void ThreeDim_LevelSet::outerwall(Raw &phi,Raw &g,double lambda,double mu,double
 		phi = this->minimal_surface(phi,pull+g,lambda,mu,-10,epsilon,timestep,1,potentialFunction)+\
 			this->minimal_surface(phi,g,lambda,mu,-alfa,epsilon,timestep,1,potentialFunction);
 		
-		cout << "outer wall iter = " << i <<endl;
+			cout << "outer wall iter = " << i <<endl;
 	}
 
 }
@@ -470,4 +470,10 @@ Raw ThreeDim_LevelSet::ImageFSqrt( Raw &phi_x, Raw &phi_y,Raw &phi_z )
 	}
 
 	return ret.set_shared(true);
+}
+
+void Narrowband (Raw &phi)
+{
+
+	
 }

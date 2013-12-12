@@ -206,9 +206,23 @@ void pvalue(int [])
 	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
 
 }
+void ddcircle(string dir)
+{
+	RawImage test;
+	char dst[100];
+	strcpy(dst,dir.c_str());
+	char dir2[200]="D:\\sdfdata\\";
+	strcat(dir2,dst);
+	char dir3[300];
+	strcpy(dir3,dir2);
+	strcat(dir3,"outer.raw");
+	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+
+}
 int main(int argc,char **argv)
 {
 	string dir("K:\\sdf\\volume\\clean\\clean\\ep\\");//K:\sdf\volume\clean\clean\ep//
+
 	vector<string> files;
 	GetFileNameFromDir(dir,files);
 	vector<string>::iterator iterFile;
@@ -216,7 +230,7 @@ int main(int argc,char **argv)
 	{
 		iterFile->assign(iterFile->substr(dir.size()+1));
 		cout<<*iterFile <<endl;
-		testcolon(argc,*iterFile);
+		//testcolon(argc,*iterFile);
 	}
 	cout<<endl;
 	

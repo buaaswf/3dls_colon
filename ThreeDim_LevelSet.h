@@ -13,6 +13,7 @@ public:
 	void outerwall(Raw &src,Raw &phi,double lambda,double mu,double alfa,float epsilon,int timestep,int iter,char *potentialFunction);
 	void outerwallauto(Raw &src,Raw &phi,double lambda,double mu,double alfa,float epsilon,int timestep,int iter,char *potentialFunction);
 	void NeumannBoundCond( Raw &phi );
+	void Narrowband (Raw &phi);
 	Raw ImageFSqrt( Raw &phi_x, Raw &phi_y,Raw &phi_z );
 	void initialg(Raw &raw);
 };
