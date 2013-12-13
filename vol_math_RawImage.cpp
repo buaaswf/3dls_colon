@@ -202,7 +202,7 @@ void RawImage::writeImageName(Raw &destImg, char *name)
 			for (int k=0;k<destImg.getXsize();k++)
 			{
 				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
-				if((k-256)*(k-256)+(j-256)*(j-256)<256*256-20*20)//k<409 && k> 107 && j>156 &&j <390
+				if( ((k-256)*(k-256)+(j-256)*(j-256) )<(200*200)//k<409 && k> 107 && j>156 &&j <390
 				{
 					if (*val>1)
 					{

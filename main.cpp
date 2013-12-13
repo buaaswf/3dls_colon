@@ -210,30 +210,55 @@ void pvalue(int [])
 }
 void ddcircle(string dir)
 {
+	int l=512;
+	int m=512; 
+	int	n=20;
 	RawImage test;
 	char dst[100];
 	strcpy(dst,dir.c_str());
-	char dir2[200]="D:\\sdfdata\\";
+	char dir2[200]="ddthickness.raw";
 	strcat(dir2,dst);
-	char dir3[300];
-	strcpy(dir3,dir2);
-	strcat(dir3,"outer.raw");
-	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+	float * indata1=test.readStreamfloat("F:\\ddcircle\\WI_3032_P_iso_cleanthickness.raw",&l,&m,&n);
+	for (int i = 0; i < n; i++)
+	{
+		for ( int j = 0; j < l; j++)
+		{
+			for ( int k = 0; k < m; k++)
+			{
+				PIXTYPE *val=&indata1[i*l*m+j*m+k];
+				if ((( j - 255 ) * ( j - 255 ) + ( k - 256 ) * ( k-256 )) >= 40000)
+				{
 
+					*val = 0;
+
+				} 
+			}
+		}
+	}
+	//Raw *indata=new Raw(l,m,n,indata1);
+	FILE *p;
+	p=fopen("F:\\ddcircle\\ddcircle.raw","wb");
+	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
+	fclose(p);
+	fflush(stdout);
+	delete [] indata1;
+	//indata->~Raw();
 }
+
 int main(int argc,char **argv)
 {
-	string dir(input0);//K:\sdf\volume\clean\clean\ep//
+	//string dir(input0);//K:\sdf\volume\clean\clean\ep//
 
-	vector<string> files;
-	GetFileNameFromDir(dir,files);
-	vector<string>::iterator iterFile;
-	for (iterFile=files.begin();iterFile!=files.end();iterFile++)
-	{
-		iterFile->assign(iterFile->substr(dir.size()+1));
-		cout<<*iterFile <<endl;
-		testcolon(argc,*iterFile);
-	}
+	//vector<string> files;
+	//GetFileNameFromDir(dir,files);
+	//vector<string>::iterator iterFile;
+	//for (iterFile=files.begin();iterFile!=files.end();iterFile++)
+	//{
+	//	iterFile->assign(iterFile->substr(dir.size()+1));
+	//	cout<<*iterFile <<endl;
+	//	testcolon(argc,*iterFile);
+	//}
+	ddcircle("F:\\ddcircle\\");
 	cout<<endl;
 	
 	system("pause");
