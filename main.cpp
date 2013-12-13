@@ -17,7 +17,8 @@
 #else
 #include <dirent.h>
 #endif
-
+#define output "F:\\" 
+#define input0 "E:\\volume\\cleantestdata\\test\\"  //"K:\\sdf\\volume\\clean\\clean\\ep\\"
 using namespace std;
 
 using namespace cimg_library;
@@ -85,7 +86,8 @@ void testcolon(int argc,string dir)
 	char *pt="single_well";
 	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
 	RawImage test;
-	char dirhead[200]="K:\\sdf\\volume\\clean\\clean\\ep\\";
+	char dirhead[200]=input0;  //K:\\sdf\\volume\\clean\\clean\\ep\\
+
 	char dirbody[100];
 	strcpy(dirbody,dir.c_str());
 	cout <<"dirbody"<<dirbody<<endl;
@@ -123,15 +125,15 @@ void testcolon(int argc,string dir)
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 	char *outname1="inner.raw";
-	char outdir[200]="D:\\sdfdata\\";
+	char outdir[200]=output;
 	strcat(outdir,dirbody);
 	strcat(outdir,outname1);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,5,pt);
+	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
 	//*initial -=temp;
 	char *outname2="outer.raw";
-	char outdir2[200]="D:\\sdfdata\\";
+	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
 	strcat(outdir2,outname2);
 	test.writeImageName(*initial,outdir2);
@@ -144,7 +146,7 @@ void evaluate(string dir,int l,int m,int n)
 	RawImage test;
 	char dst[100];
 	strcpy(dst,dir.c_str());
-	char dir2[200]="D:\\sdfdata\\";
+	char dir2[200]=output;
 	strcat(dir2,dst);
 	char dir3[300];
 	strcpy(dir3,dir2);
@@ -221,7 +223,7 @@ void ddcircle(string dir)
 }
 int main(int argc,char **argv)
 {
-	string dir("K:\\sdf\\volume\\clean\\clean\\ep\\");//K:\sdf\volume\clean\clean\ep//
+	string dir(input0);//K:\sdf\volume\clean\clean\ep//
 
 	vector<string> files;
 	GetFileNameFromDir(dir,files);
@@ -230,7 +232,7 @@ int main(int argc,char **argv)
 	{
 		iterFile->assign(iterFile->substr(dir.size()+1));
 		cout<<*iterFile <<endl;
-		//testcolon(argc,*iterFile);
+		testcolon(argc,*iterFile);
 	}
 	cout<<endl;
 	
