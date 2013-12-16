@@ -83,20 +83,20 @@ void RawImage::readImage2(float * buf,char const *file ,int size)
 short * RawImage::readStream(char const *filename,int *l,int * m,int  * n)
 {
 	
-	int lx=512,ly=512,lz=20;
+	int lx=0,ly=0,lz=0;
 	ifstream file;
 	file.open(filename, ios::out | ios::app | ios::binary);
 	if (!file.is_open()) {
 		cout<< "The file open failed, Please check it and try again"<< endl;
 		exit(0);
 	}
-	//file.read(reinterpret_cast<char *>(&lx),sizeof(int));
-	//file.read(reinterpret_cast<char *>(&ly),sizeof(int));
-	//file.read(reinterpret_cast<char *>(&lz),sizeof(int));
+	file.read(reinterpret_cast<char *>(&lx),sizeof(int));
+	file.read(reinterpret_cast<char *>(&ly),sizeof(int));
+	file.read(reinterpret_cast<char *>(&lz),sizeof(int));
 	int size=lx*ly*lz*sizeof(short);
 	*l=lx;*m=ly;*n=lz;
 	short *buf=new short[size];
-	//file.seekg(24L,ios::beg);//+512*512*345*sizeof(short)
+	file.seekg(24L,ios::beg);//+512*512*345*sizeof(short)
 	file.read((char *)buf,size);
 	file.close();
 	return buf;
@@ -169,7 +169,7 @@ void RawImage::writeImage(Raw &destImg)
 			for (int k=0;k<destImg.getXsize();k++)
 			{
 				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
-				if(k*k+j*j<285)//k<409 && k> 107 && j>156 &&j <390
+				if((( j - 256 ) * ( j - 256 ) + ( k - 256 ) * ( k-256 )) < 220*220)//k<409 && k> 107 && j>156 &&j <390
 				{
 					if (*val>1)
 					{
