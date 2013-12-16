@@ -18,7 +18,7 @@
 #include <dirent.h>
 #endif
 #define output "F:\\" 
-#define input0 "E:\\volume\\cleantestdata\\test\\"  //"K:\\sdf\\volume\\clean\\clean\\ep\\"
+#define input0 "E:\\volume\\cleantestdata\\test2\\"  //"K:\\sdf\\volume\\clean\\clean\\ep\\"
 using namespace std;
 
 using namespace cimg_library;
@@ -194,18 +194,70 @@ void evaluate(string dir,int l,int m,int n)
 
 }
 
-void pvalue(int [])
+void pvalue()
 {
-	//int l=512,m=512,n=570;
-	//RawImage test;
-	//char dst[100];
-	//strcpy(dst,dir.c_str());
-	//char dir2[200]="D:\\sdfdata\\";
+	int l=512,m=512,n=20;
+	RawImage test;
+	char dir1[200]="F:\\ddcircle\\WI_3032_P_iso_clean-341-360.raw";
+	char dir2[200]="F:\\ddcircle\\ddcircle.raw";
 	//strcat(dir2,dst);
-	//char dir3[300];
-	//strcpy(dir3,dir2);
-	//strcat(dir3,"outer.raw");
-	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+	float * indata1=test.readStreamfloat(dir2,&l,&m,&n);
+	short * indata2=test.readStream(dir1,&l,&m,&n);
+	int TT=0,TF=0,FT=0,FF=0;
+	for (int i = 0; i < n; i++ )
+	{
+		for (int j = 0; j < l; j++)
+		{
+			for (int k =0; k < m; k++)
+			{
+				if (k<450 && k >60 && j > 192 && j <375)
+				{
+					PIXTYPE val1 = indata1 [i*l*m+j*m+k];
+					//cout<<val1<<endl;
+					short val2 = indata2 [i*l*m+j*m+k];
+					//if (val2 !=0)
+					//{
+					//	cout << val2 <<endl;
+					//} 
+					//else
+					//{
+					//}
+
+					if ( val1 == 100)
+					{
+
+						if (val2 > -938 && val2 < -124)
+						{
+							TT++;
+						} 
+						else
+						{
+							FT++;
+						}
+					} 
+					if (val2 > -938 && val2 <-124)
+					{
+
+						if (val1==0)
+						{
+							TF++;
+						} 
+
+					} 
+					else if (val1==0)
+					{
+						FF++;
+					}
+				} 
+				else
+				{
+				}
+	
+				
+			}
+		}
+	}
+	cout <<"TT:"<<TT<<"TF:"<<TF<<"FF:"<<FF<<"FT"<<FT<<endl;
 
 }
 void ddcircle(string dir)
@@ -226,7 +278,7 @@ void ddcircle(string dir)
 			for ( int k = 0; k < m; k++)
 			{
 				PIXTYPE *val=&indata1[i*l*m+j*m+k];
-				if ((( j - 255 ) * ( j - 255 ) + ( k - 256 ) * ( k-256 )) >= 40000)
+				if ((( j - 256 ) * ( j - 256 ) + ( k - 256 ) * ( k-256 )) >= 40000)
 				{
 
 					*val = 0;
@@ -247,18 +299,19 @@ void ddcircle(string dir)
 
 int main(int argc,char **argv)
 {
-	//string dir(input0);//K:\sdf\volume\clean\clean\ep//
+	string dir(input0);//K:\sdf\volume\clean\clean\ep//
 
-	//vector<string> files;
-	//GetFileNameFromDir(dir,files);
-	//vector<string>::iterator iterFile;
-	//for (iterFile=files.begin();iterFile!=files.end();iterFile++)
-	//{
-	//	iterFile->assign(iterFile->substr(dir.size()+1));
-	//	cout<<*iterFile <<endl;
-	//	testcolon(argc,*iterFile);
-	//}
-	ddcircle("F:\\ddcircle\\");
+	vector<string> files;
+	GetFileNameFromDir(dir,files);
+	vector<string>::iterator iterFile;
+	for (iterFile=files.begin();iterFile!=files.end();iterFile++)
+	{
+		iterFile->assign(iterFile->substr(dir.size()+1));
+		cout<<*iterFile <<endl;
+		//testcolon(argc,*iterFile);
+	}
+	//ddcircle("F:\\ddcircle\\");
+	//pvalue();
 	cout<<endl;
 	
 	system("pause");
