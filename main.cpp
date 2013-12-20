@@ -20,7 +20,7 @@
 #endif
 #define output "D:\\sdfdata\\" 
 #define input1  "D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"
-#define input2  "K:\\sdf\\volume\\clean\\clean\\ep\\" 
+#define input2  "K:\\sdf\\volume\\clean\\clean\\ep\\test3\\" 
 using namespace cimg_library;
 using namespace std;
 
@@ -124,7 +124,7 @@ void testcolon(int argc,string dir)
 
 	}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
-	char *outname1="inner.raw";
+	char *outname1="inner5-8_circle.raw";
 	char outdir[200]=output;
 	strcat(outdir,dirbody);
 	strcat(outdir,outname1);
@@ -132,7 +132,7 @@ void testcolon(int argc,string dir)
 	//Raw temp(*initial);
 	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
 	//*initial -=temp;
-	char *outname2="outer4-4.raw";
+	char *outname2="outer5-8_circle.raw";
 	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
 	strcat(outdir2,outname2);
@@ -150,11 +150,11 @@ void evaluate(string dir,int l,int m,int n)
 	strcat(dir2,dst);
 	char dir3[300];
 	strcpy(dir3,dir2);
-	strcat(dir3,"outer4-4.raw");
+	strcat(dir3,"outer5-8_circle.raw");
 	float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
 	char dir4[300];
 	strcpy(dir4,dir2);
-	strcat(dir4,"inner4-4.raw");
+	strcat(dir4,"inner5-8_circle.raw");
 	float * indata2=test.readStreamfloat(dir4,&l,&m,&n);
 	for ( int k = 0; k < n; k++ )
 	{
@@ -184,7 +184,7 @@ void evaluate(string dir,int l,int m,int n)
 	FILE *p;
 	char dir5[300];
 	strcpy(dir5,dir2);
-	strcat(dir5,"thickness4-4.raw");
+	strcat(dir5,"thickness5-8_circle.raw");
 	p=fopen(dir5,"wb");
 	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
 	fclose(p);
@@ -362,7 +362,7 @@ int main(int argc,char **argv)
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		testcolon(argc,*iterFile);
+		testcolon(argc,*iterFile2);
 	}
 
 	cout<<endl;
