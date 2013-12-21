@@ -112,6 +112,7 @@
     <ClInclude Include="..\Filter.h" />
     <ClInclude Include="..\image.h" />
     <ClInclude Include="..\Resource.h" />
+    <ClInclude Include="..\statistics.h" />
     <ClInclude Include="..\test.h" />
     <ClInclude Include="..\ThreeDim_LevelSet.h" />
     <ClInclude Include="..\vol_math_anistropic.h" />

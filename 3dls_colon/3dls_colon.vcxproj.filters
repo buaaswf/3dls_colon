@@ -54,6 +54,9 @@
     <ClInclude Include="..\WipeNioisePde.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\statistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\image.cpp">
