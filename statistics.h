@@ -19,7 +19,7 @@
 #endif
 #define output "D:\\sdfdata\\" 
 #define input1  "D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-#define input2	"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+#define input2	"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
 using namespace cimg_library;
 using namespace std;
 //////////////////////////////////////////////////////////////////////////
@@ -88,11 +88,11 @@ void evaluate(string dir,int l,int m,int n)
 	strcat(dir2,dst);
 	char dir3[300];
 	strcpy(dir3,dir2);
-	strcat(dir3,"outer5-8_circle.raw");
+	strcat(dir3,"outer5-8_2.raw");
 	float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
 	char dir4[300];
 	strcpy(dir4,dir2);
-	strcat(dir4,"inner5-8_circle.raw");
+	strcat(dir4,"inner5-8_2.raw");
 	float * indata2=test.readStreamfloat(dir4,&l,&m,&n);
 	for ( int k = 0; k < n; k++ )
 	{
@@ -122,7 +122,7 @@ void evaluate(string dir,int l,int m,int n)
 	FILE *p;
 	char dir5[300];
 	strcpy(dir5,dir2);
-	strcat(dir5,"thickness5-8_circle.raw");
+	strcat(dir5,"thickness5-8_2.raw");
 	p=fopen(dir5,"wb");
 	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
 	fclose(p);
@@ -294,9 +294,9 @@ void float2uchar(int l, int m ,int n,string dir)
 	RawImage test;
 	char dst[100];
 	strcpy(dst,dir.c_str());
-	char dir2[200]="J:\\swfdata\\nocircle\\";
+	char dir2[200]="D:\\sdfdata\\distance\\";
 	strcat(dir2,dst);
-	char dir1[200] = "J:\\swfdata\\distance\\";
+	char dir1[200] = "L:\\sdfdata2\\thicknessuint8\\";
 	strcat(dir1,dst);
 	float * indata1=test.readStreamfloat(dir2,&l,&m,&n);
 	unsigned char * outdata=new unsigned char[l*m*n];

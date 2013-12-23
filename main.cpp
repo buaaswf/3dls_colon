@@ -75,7 +75,7 @@ void testcolon(int argc,string dir)
 	strcat(outdir,outname1);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwall(*initial,*input,5.0,0.1,-+3,1.5,1,10,pt);
+	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
 	//*initial -=temp;
 	char *outname2="outer5-8_2.raw";
 	char outdir2[200]=output;
@@ -99,9 +99,8 @@ int main(int argc,char **argv)
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		testcolon(argc,*iterFile2);
-		//float2uchar(512,512,700,*iterFile2);
-		iterFile2++;
+		//testcolon(argc,*iterFile2);
+		float2uchar(512,512,700,*iterFile2);
 	}
 
 	cout<<endl;
