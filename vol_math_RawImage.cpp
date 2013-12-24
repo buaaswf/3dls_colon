@@ -36,7 +36,7 @@ RawImage::RawImage()
 float * RawImage::readStreamfloat(char const *filename,int *l,int * m,int  * n)
 {
 	ifstream file;
-	file.open(filename, ios::out | ios::app | ios::binary);
+	file.open(filename, ios::binary);
 	if (!file.is_open()) {
 		cout<< "The file open failed, Please check it and try again"<< endl;
 		exit(0);

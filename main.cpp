@@ -99,12 +99,15 @@ int main(int argc,char **argv)
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		//testcolon(argc,*iterFile2);
-		float2uchar(512,512,700,*iterFile2);
+		testcolon(argc,*iterFile2);
+		//float2uchar(512,512,700,*iterFile2);
+		//thincknessstdv2(*iterFile2);
+		//roc(*iterFile2);
 	}
 
 	cout<<endl;
-	
+	//roc();
+	//threshold();
 	system("pause");
 	return 0;
 }

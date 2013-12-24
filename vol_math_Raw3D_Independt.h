@@ -196,7 +196,10 @@ public:
 			cout<<"out of size get "<<endl;
 		}
 	}
-
+	PIXTYPE * getdata()
+	{
+		return data;
+	}
 	void putXY(int ixy,PIXTYPE val){// write value at 1D address ixy
 		if (ixy<xsize*ysize)
 		{
