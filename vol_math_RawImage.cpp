@@ -36,7 +36,7 @@ RawImage::RawImage()
 float * RawImage::readStreamfloat(char const *filename,int *l,int * m,int  * n)
 {
 	ifstream file;
-	file.open(filename, ios::binary);
+	file.open(filename,ios::out |ios::app| ios::binary);
 	if (!file.is_open()) {
 		cout<< "The file open failed, Please check it and try again"<< endl;
 		exit(0);
@@ -173,10 +173,10 @@ void RawImage::writeImage(Raw &destImg)
 				{
 					if (*val>1)
 					{
-						*val=0;
+						*val=100;
 
 					}
-					else *val=100;
+					else *val=0;
 				}
 				else *val=0;
 			}
@@ -186,7 +186,7 @@ void RawImage::writeImage(Raw &destImg)
 	fclose(p);
 	fflush(stdout);
 
-	delete[] data;
+	//delete[] data;
 	printf("write is ok");
 }
 void RawImage::writeImageName(Raw &destImg, char *name)
@@ -201,17 +201,17 @@ void RawImage::writeImageName(Raw &destImg, char *name)
 		{
 			for (int k=0;k<destImg.getXsize();k++)
 			{
-				PIXTYPE *val=&data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
+				PIXTYPE *val = &data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
 				if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
 				{
-					if (*val>1)
+					if (*val > 1)
 					{
-						*val=0;
+						*val = 100;  //change to 100 for roc computing *val=0; 
 
 					}
-					else *val=100;
+					else *val = 0; ////change to 0 for roc computing *val=100; 
 				}
-				else *val=0;
+				else *val = 0;
 			}
 		}
 	}

@@ -88,26 +88,27 @@ void testcolon(int argc,string dir)
 
 int main(int argc,char **argv)
 {
-	string dir2(input2);
-	vector<string> files2;
-	GetFileNameFromDir(dir2,files2);
-	vector<string>::iterator iterFile2;
-	for (iterFile2=files2.begin();iterFile2!=files2.end();iterFile2++)
-	{
+	//string dir2(input2);
+	//vector<string> files2;
+	//GetFileNameFromDir(dir2,files2);
+	//vector<string>::iterator iterFile2;
+	//for (iterFile2=files2.begin();iterFile2!=files2.end();iterFile2++)
+	//{
 
-		
-		iterFile2->assign(iterFile2->substr(dir2.size()+1));
-		cout<<*iterFile2 <<endl;
-		//ddcircle(*iterFile);
-		testcolon(argc,*iterFile2);
-		//float2uchar(512,512,700,*iterFile2);
-		//thincknessstdv2(*iterFile2);
-		//roc(*iterFile2);
-	}
+	//	
+	//	iterFile2->assign(iterFile2->substr(dir2.size()+1));
+	//	cout<<*iterFile2 <<endl;
+	//	//ddcircle(*iterFile);
+	//	testcolon(argc,*iterFile2);
+	//	//float2uchar(512,512,700,*iterFile2);
+	//	//thincknessstdv2(*iterFile2);
+	//	//roc(*iterFile2);
+	//}
 
-	cout<<endl;
-	//roc();
+	//cout<<endl;
+	roc3();
 	//threshold();
+	//rocway2();
 	system("pause");
 	return 0;
 }

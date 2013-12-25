@@ -18,8 +18,9 @@
 #include <dirent.h>
 #endif
 #define output "D:\\sdfdata\\" 
-#define input1  "D:\\sdfdata\\distance\\rocdata\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-#define input2	"K:\\sdf\\volume\\clean\\clean\\ep\\rocdatao\\"   //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+#define input1  "L:\\sdfdata2\\outer\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
+#define input2	"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+#define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
 using namespace cimg_library;
 using namespace std;
 //////////////////////////////////////////////////////////////////////////
@@ -76,7 +77,7 @@ void GetFileNameFromDir(string strDir,vector<string>& vFileDirList)
 	sort(vFileDirList.begin(), vFileDirList.end());
 #endif
 }
-
+void rocwayinner2people(string dir1, string dir2);
 void evaluate(string dir,int l ,int m,int n);
 void evaluate(string dir,int l,int m,int n)
 {
@@ -132,20 +133,25 @@ void evaluate(string dir,int l,int m,int n)
 
 }
 
-void pvalue( string dir1,string dir2)
+void pvalue( string dir1,string dir2,string dir22)
 {
 	int l=0,m=0,n=0;
-	char dst1[200],dst2[200];
+	char dst1[200],dst2[200],dst3[200];
 	strcpy(dst1,dir1.c_str()); //string-->char
 	strcpy(dst2,dir2.c_str());
+	strcpy(dst3,dir22.c_str());
 	RawImage test;
-	char dir3[200]="D:\\sdfdata\\distance\\rocdata\\" ;
-	char dir4[200]="K:\\sdf\\volume\\clean\\clean\\ep\\rocdatao\\";
+	char dir3[200]	=	input1;  //"D:\\sdfdata\\distance\\rocdata\\" ;
+	char dir4[200]	=	input2;  //"K:\\sdf\\volume\\clean\\clean\\ep\\rocdatao\\";
+	char dir5[200]	=	"K:\\sdf\\volume\\clean\\clean\\ep\\clean\\" ;
 	strcat(dir3,dst1);
 	strcat(dir4,dst2);
-	short * indata2=test.readStream(dir4,&l,&m,&n);
+	strcat(dir5,dst3);
+	short * indata2=test.readStream(dir5,&l,&m,&n);
+	delete [] indata2;
 	cout<<m<<endl;
-	float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+	float * indata1 = test.readStreamfloat(dir3,&l,&m,&n);	//level-set data
+	float * indata3 = test.readStreamfloat(dir4,&l,&m,&n);	//robot data
 
 	int TT=0,TF=0,FT=0,FF=0;
 	double *res=new double[4];
@@ -158,7 +164,7 @@ void pvalue( string dir1,string dir2)
 
 				PIXTYPE val1 = indata1 [i*l*m+j*m+k];
 				//cout<<val1<<endl;
-				short val2 = indata2 [i*l*m+j*m+k];
+				short val2 = indata3 [i*l*m+j*m+k];
 				//if (val2 !=0)
 				//{
 				//	cout << val2 <<endl;
@@ -171,7 +177,7 @@ void pvalue( string dir1,string dir2)
 				{
 					//cout <<val1<<endl;
 
-					if (val2 > -938 && val2 < -124  )
+					if (val2 ==100  ) //or val [-924,-124]
 					{
 						TT++;
 					} 
@@ -180,7 +186,7 @@ void pvalue( string dir1,string dir2)
 						FT++;
 					}
 				} 
-				if (val2 > -938 && val2 <-124 && (( j - 256 ) * ( j - 256 ) + ( k - 256 ) * ( k-256 )) <= 200 *200)
+				if (val2 ==100 && (( j - 256 ) * ( j - 256 ) + ( k - 256 ) * ( k-256 )) <= 200 *200) //> -938 && val2 <-124
 				{
 
 					if (val1==0)
@@ -222,7 +228,7 @@ void pvalue( string dir1,string dir2)
 	else cerr <<"no file" <<endl;
 	delete [] res;
 	delete [] indata1;
-	delete [] indata2;
+	delete [] indata3;
 
 }
 void ddcircle(string dir)
@@ -281,8 +287,47 @@ void roc()
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile1 <<endl;
 		cout<<*iterFile2 <<endl;
-		pvalue(*iterFile1,*iterFile2);
+		//pvalue(*iterFile1,*iterFile2);
+		
+		//rocwayinner2people(*iterFile1,*iterFile2);
 		iterFile2++;
+		//ddcircle(*iterFile);
+		//testcolon(argc,*iterFile);
+	}
+
+	cout<<endl;
+}
+
+void roc3()
+{
+	string dir1(input1);//K:\sdf\volume\clean\clean\ep// D:\sdfdata\distance\rocdata
+	string dir2(input2);//K:\sdf\volume\clean\clean\ep\rocdatao
+	string dir3(input3);
+	//cout << dir1 <<endl;
+	vector<string> files1;
+	vector<string> files2;
+	vector<string> files3;
+	GetFileNameFromDir(dir1,files1);
+	GetFileNameFromDir(dir2,files2);
+	GetFileNameFromDir(dir3,files3);
+	vector<string>::iterator iterFile1,
+		iterFile2 = files2.begin(),
+		iterFile3 = files3.begin() ;
+	for (iterFile1=files1.begin();iterFile1!=files1.end();iterFile1++)
+	{
+
+
+		iterFile1->assign(iterFile1->substr(dir1.size()+1));
+		iterFile2->assign(iterFile2->substr(dir2.size()+1));
+		iterFile3->assign(iterFile3->substr(dir3.size()+1));
+		cout<<*iterFile1 <<endl;
+		cout<<*iterFile2 <<endl;
+		cout <<*iterFile3 <<endl;
+		pvalue(*iterFile1,*iterFile2,*iterFile3);
+
+		//rocwayinner2people(*iterFile1,*iterFile2);
+		iterFile2++;
+		iterFile3++;
 		//ddcircle(*iterFile);
 		//testcolon(argc,*iterFile);
 	}
@@ -571,62 +616,129 @@ void threshold()
 bool sign(PIXTYPE data)
 {
 	return data< -124 && data > -924;
+	//return data!=100;
 }
-void rocway2()
+PIXTYPE  biglittleedian(PIXTYPE  val)
 {
-
-	char * file="";
-	int l = 512,
-		m = 512,
-		n = 700;
+	
+	PIXTYPE *q=&val;
+	unsigned char * p= (unsigned char*) q;
+	std::swap(p[0],p[3]);
+	std::swap(p[1],p[2]);
+	return val;
+}
+void rocwayinner2people(string dir1, string dir2)
+{
+	int l=0,m=0,n=0;
+	char dst1[200],dst2[200];
+	strcpy(dst1,dir1.c_str()); //string-->char
+	strcpy(dst2,dir2.c_str());
 	RawImage test;
-	PIXTYPE * innerdata=test.readStreamfloat(file,&l,&m,&n);
-	Raw * src= new Raw(l,m,n,innerdata);
-	PIXTYPE *orgion;
-	for (int i =0; i< n ;i++)
+	char dir3[200]="L:\\sdfdata2\\inner\\" ;
+	char dir4[200]="K:\\sdf\\volume\\clean\\clean\\ep\\clean\\";
+	char dir5[200]="L:\\sdfdata2\\people\\";
+	strcat(dir3,dst1);
+	strcat(dir4,dst2);
+	strcat(dir5,dst1);
+	//short * indata2=test.readStream(dir4,&l,&m,&n);
+	//cout<<m<<endl;
+	//float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
+
+	//char * file="L:\\sdfdata2\\inner\\",
+	//	*file1="K:\\sdf\\volume\\clean\\clean\\ep\\clean\\";
+	//int l = 512,
+	//	m = 512,
+	//	n = 700;
+	//int l = 0,
+	//	m = 0,
+	//	n = 0;
+	//RawImage test;
+	short*orgiondata=test.readStream(dir4,&l,&m,&n);
+	PIXTYPE * innerdata=test.readStreamfloat(dir3,&l,&m,&n);
+
+	Raw src(l,m,n,innerdata);
+	float *inputo=new float[l*m*n];
+	for (int i = 0; i < l*m*n; i++)
 	{
-		for (int j = 0; j < m; j++)
-		{
-			 for (int k = 0; k < l; k++)
-			 {
-				 PIXTYPE val =src->get(i,j,k);
-				 if (sign(src->get ( i-1, j ,k))|| sign(src->get(i-1 ,j-1,k)) || sign(src->get(i-1,j+1,k)) \
-					 || sign(src->get(i,j-1,k))|| sign(src->get(i,j+1,k)) || sign(src->get(i+1,j,k) ) || sign(src->get(i+1,j-1,k))|| sign(src->get(i+1,j+1,k))  )
-				 {
-					 //if ( val neighbor is [-928,-124])
-					 //{
-					 //src->put(i,j,k,100);
-					 //src->put(i,j,k+1,100);
-					 //src->put(i,j,k-1,100);
-					 //src->put(i,j,k,100);
-					 //src->put(i,j,k+1,100);
-					 //src->put(i,j,k-1,100);
-					 //src->put(i,j,k,100);
-					 //src->put(i,j,k+1,100);
-					 //src->put(i,j,k-1,100);
-					 for (int z1= -1; z1<1; z1++)
-					 {
-						 for (int y1=-1 ;y1 <1;y1++)
-						 {
-							for ( int x1 =-1 ; x1 <1; x1++)
-							{
-								src->put(i+x1,j+y1,k+z1,100);
-							}
-						 }
-					 }
-						 
-				 //} 
-				 //else
-					// {
-					// }
-
-				 } 
-				 else
-				 {
-				 }
-			 }
-		}
-
+		inputo[i]=(float) orgiondata[i];		
 	}
+	Raw *orgion = new Raw(l,m,n,inputo);
+	
+	
+	int count=0,time=4;
+	do 
+	{
+		//Raw srcnew(src);
+		for (int k =1; k< n-1 ;k++)
+		{
+			for (int j = 1; j < m-1; j++)
+			{
+				for (int i = 1; i < l-1; i++)
+				{
+					PIXTYPE val =src.get(i,j,k);
+					//unsigned char * p= (unsigned char *)innerdata;
+					//std::swap(p[0],p[3]);
+					//std::swap(p[1],p[2]);
 
+					if (val==100)
+					{		
+						PIXTYPE data1=orgion->get ( i-1, j ,k);
+						//PIXTYPE *q=&data1;
+						//unsigned char * p= (unsigned char*) q;
+						//std::swap(p[0],p[3]);
+						//std::swap(p[1],p[2]);
+							if (sign(data1))
+							{
+								src.put(i-1 ,j,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i-1 ,j-1,k)))
+							{
+								src.put(i-1,j-1,k,100);
+								count ++;
+							}
+						
+							if (sign(orgion->get(i-1,j+1,k)))
+							{
+								src.put(i-1,j+1,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i,j-1,k)))
+							{
+								src.put(i,j-1,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i,j+1,k)))
+							{
+								src.put(i,j+1,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i+1,j,k)) )
+							{
+								src.put(i+1,j,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i+1,j-1,k)))
+							{
+								src.put(i+1,j-1,k,100);
+								count++;
+							}
+							if (sign(orgion->get(i+1,j+1,k)))
+							{
+								src.put(i+1,j+1,k,100);
+								count++;
+							}
+					}
+
+				}
+			}
+
+		}
+		
+		time--;
+		cout <<count <<endl;
+		
+	} while (time);
+	
+	test.writeImageName(src,dir5);
 }
