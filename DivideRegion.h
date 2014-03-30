@@ -167,7 +167,7 @@ void  HistHU(Raw *thickness,Raw *origion,Raw *hu)
 	}
 
 }
-void DivideRegionthickness(Raw *colonskeleton,Raw *thickness)
+void DivideRegionthickness(Raw *colonskeleton,Raw *data)
 {
 	int count=0;
 	vector<Point> skeleton;

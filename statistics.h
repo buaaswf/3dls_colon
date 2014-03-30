@@ -19,8 +19,12 @@
 #include <dirent.h>
 #endif
 #define output "D:\\sdfdata\\" 
-#define input1  "L:\\sdfdata2\\outer\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-#define input2	"L:\\sdfdata2\\outer\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+//#define input1  "L:\\sdfdata2\\outer\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
+//#define input2	"L:\\sdfdata2\\outer\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+//#define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
+#define output "D:\\sdfdata\\" 
+#define input1  "F:\\data\\nocircle\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
+#define input2	"E:\\volume\\skeletono\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
 #define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
 using namespace cimg_library;
 using namespace std;
@@ -745,7 +749,7 @@ void rocwayinner2people(string dir1, string dir2)
 }
 Raw* thicknessequalHU(Raw *origion,Raw *thickness)
 {
-	Raw *HU =new Raw(origion);
+	Raw *HU =new Raw(*origion);
 	for (int i=0;i<origion->size();i++)
 	{
 		if(thickness->getXYZ(i)==1)
@@ -754,6 +758,7 @@ Raw* thicknessequalHU(Raw *origion,Raw *thickness)
 			HU->putXYZ(i,0);
 			
 	}
+	return HU;
 }
 void HUandThickness()
 {
@@ -766,10 +771,11 @@ void HUandThickness()
 	//cout << dir1 <<endl;
 	vector<string> files1;
 	vector<string> files2;
+	vector<string> files3;
 	GetFileNameFromDir(dir1,files1);
 	GetFileNameFromDir(dir2,files2);
 	GetFileNameFromDir(dir3,files3);
-	vector<string>::iterator iterFile1,iterFile2=files2.begin();;
+	vector<string>::iterator iterFile1,iterFile2=files2.begin(),iterFile3;
 	for (iterFile1=files1.begin();iterFile1!=files1.end();iterFile1++)
 	{
 
@@ -796,7 +802,7 @@ void HUandThickness()
 		strcat(dir6,dst3);
 		short*orgiondata=test.readStream(dir4,&l,&m,&n);
 		PIXTYPE * innerdata=test.readStreamfloat(dir3,&l,&m,&n);
-		PIXTYPE * skeleton=test.readStreamfloat(dir6,&l,&m,&n);
+		PIXTYPE * skeletondata=test.readStreamfloat(dir6,&l,&m,&n);
 		Raw src(l,m,n,innerdata);
 		float *inputo=new float[l*m*n];
 		for (int i = 0; i < l*m*n; i++)
@@ -804,10 +810,10 @@ void HUandThickness()
 			inputo[i]=(float) orgiondata[i];		
 		}
 		Raw *orgion = new Raw(l,m,n,inputo);
-		
+		Raw *skeleton =new Raw(l,m,n,skeletondata); 
 		Raw *hu=thicknessequalHU(orgion,&src);
 		DivideRegion(skeleton,hu);
-		DivideRegionthickness(skeleton,innerdata);
+		DivideRegionthickness(skeleton,&src);
 		
 	}
 
