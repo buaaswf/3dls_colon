@@ -43,6 +43,7 @@ public:
 	void readImage2(float * buf,char const *file ,int size);
 	float * buf2float(unsigned char *buf);
 	void save();
+	void writeMRI(Raw &destImg, char *name);
 };
 class Raw  {
 private:   			//-----------------DATA----------------- 

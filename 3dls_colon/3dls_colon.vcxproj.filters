@@ -57,6 +57,9 @@
     <ClInclude Include="..\statistics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\DivideRegion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\image.cpp">
@@ -97,5 +100,6 @@
     <None Include="..\twoObj.bmp">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

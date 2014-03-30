@@ -1,6 +1,7 @@
 #include "vol_math_LevelSet.h"
 
 #include "test.h"
+#include "DivideRegion.h"
 #include <iostream>
 #include <crtdbg.h> 
 #include "CImg.h" 
@@ -19,7 +20,7 @@
 #endif
 #define output "D:\\sdfdata\\" 
 #define input1  "L:\\sdfdata2\\outer\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-#define input2	"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
+#define input2	"L:\\sdfdata2\\outer\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
 #define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
 using namespace cimg_library;
 using namespace std;
@@ -342,9 +343,9 @@ void float2uchar(int l, int m ,int n,string dir)
 	RawImage test;
 	char dst[100];
 	strcpy(dst,dir.c_str());
-	char dir2[200]="D:\\sdfdata\\distance\\";
+	char dir2[200]="L:\\sdfdata2\\outer\\";		//"D:\\sdfdata\\distance\\";
 	strcat(dir2,dst);
-	char dir1[200] = "L:\\sdfdata2\\thicknessuint8\\";
+	char dir1[200] = "L:\\sdfdata2\\outeruint8\\";
 	strcat(dir1,dst);
 	float * indata1=test.readStreamfloat(dir2,&l,&m,&n);
 	unsigned char * outdata=new unsigned char[l*m*n];
@@ -741,4 +742,73 @@ void rocwayinner2people(string dir1, string dir2)
 	} while (time);
 	
 	test.writeImageName(src,dir5);
+}
+Raw* thicknessequalHU(Raw *origion,Raw *thickness)
+{
+	Raw *HU =new Raw(origion);
+	for (int i=0;i<origion->size();i++)
+	{
+		if(thickness->getXYZ(i)==1)
+			HU->putXYZ(i,origion->getXYZ(i));
+		else
+			HU->putXYZ(i,0);
+			
+	}
+}
+void HUandThickness()
+{
+	//thickness data
+	string dir1(input1);//K:\sdf\volume\clean\clean\ep// D:\sdfdata\distance\rocdata
+	//origion data
+	string dir2(input2);//K:\sdf\volume\clean\clean\ep\rocdatao
+	//skeleton data
+	string dir3(input3);//K:\sdf\volume\clean\clean\ep\rocdatao
+	//cout << dir1 <<endl;
+	vector<string> files1;
+	vector<string> files2;
+	GetFileNameFromDir(dir1,files1);
+	GetFileNameFromDir(dir2,files2);
+	GetFileNameFromDir(dir3,files3);
+	vector<string>::iterator iterFile1,iterFile2=files2.begin();;
+	for (iterFile1=files1.begin();iterFile1!=files1.end();iterFile1++)
+	{
+
+
+		iterFile1->assign(iterFile1->substr(dir1.size()+1));
+		iterFile2->assign(iterFile2->substr(dir2.size()+1));
+		iterFile3->assign(iterFile3->substr(dir3.size()+1));
+		cout<<*iterFile1 <<endl;
+		cout<<*iterFile2 <<endl;
+		iterFile2++;
+		int l=0,m=0,n=0;
+		char dst1[200],dst2[200],dst3[200];
+		strcpy(dst1,dir1.c_str()); //string-->char
+		strcpy(dst2,dir2.c_str());
+		strcpy(dst3,dir3.c_str());
+		RawImage test;
+		char dir3[200]="L:\\sdfdata2\\inner\\" ;
+		char dir4[200]="K:\\sdf\\volume\\clean\\clean\\ep\\clean\\";
+		char dir5[200]="L:\\sdfdata2\\people\\";
+		char dir6[200]="L:\\sdfdata2\\skeleton\\";
+		strcat(dir3,dst1);
+		strcat(dir4,dst2);
+		strcat(dir5,dst1);
+		strcat(dir6,dst3);
+		short*orgiondata=test.readStream(dir4,&l,&m,&n);
+		PIXTYPE * innerdata=test.readStreamfloat(dir3,&l,&m,&n);
+		PIXTYPE * skeleton=test.readStreamfloat(dir6,&l,&m,&n);
+		Raw src(l,m,n,innerdata);
+		float *inputo=new float[l*m*n];
+		for (int i = 0; i < l*m*n; i++)
+		{
+			inputo[i]=(float) orgiondata[i];		
+		}
+		Raw *orgion = new Raw(l,m,n,inputo);
+		
+		Raw *hu=thicknessequalHU(orgion,&src);
+		DivideRegion(skeleton,hu);
+		DivideRegionthickness(skeleton,innerdata);
+		
+	}
+
 }

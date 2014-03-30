@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClInclude Include="..\CImg.h" />
     <ClInclude Include="..\DetectMemLeak.h" />
+    <ClInclude Include="..\DivideRegion.h" />
     <ClInclude Include="..\Filter.h" />
     <ClInclude Include="..\image.h" />
     <ClInclude Include="..\Resource.h" />
@@ -137,6 +138,7 @@
   <ItemGroup>
     <None Include="..\twocells.bmp" />
     <None Include="..\twoObj.bmp" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
