@@ -19,13 +19,10 @@
 #include <dirent.h>
 #endif
 #define output "D:\\sdfdata\\" 
-//#define input1  "L:\\sdfdata2\\outer\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-//#define input2	"L:\\sdfdata2\\outer\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
-//#define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
 #define output "D:\\sdfdata\\" 
-#define input1  "F:\\data\\nocircle\\"			//D:\\sdfdata\\pvaluethickness\\" //"K:\\sdf\\volume\\clean\\clean\\ep\\""E:\\volume\\cleantestdata\\test2\\"K:\sdf\volume\clean\clean\ep
-#define input2	"E:\\volume\\skeletono\\"//"K:\\sdf\\volume\\clean\\clean\\ep\\test3\\"//"L:\\sdfdata2\\people\\"  //"L:\\sdfdata2\\edt\\"				//"D:\\sdfdata\\distance\\"			//"K:\\sdf\\volume\\clean\\clean\\ep"									//"J:\\swfdata\\nocircle\\" 
-#define input3 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
+#define input1  "j:\\swfdata\\nocircle\\3041P\\"				//float
+#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\"		//short
+#define input3 "K:\\skeleton\\"   //unsigned char
 using namespace cimg_library;
 using namespace std;
 //////////////////////////////////////////////////////////////////////////
@@ -775,7 +772,7 @@ void HUandThickness()
 	GetFileNameFromDir(dir1,files1);
 	GetFileNameFromDir(dir2,files2);
 	GetFileNameFromDir(dir3,files3);
-	vector<string>::iterator iterFile1,iterFile2=files2.begin(),iterFile3;
+	vector<string>::iterator iterFile1,iterFile2=files2.begin(),iterFile3=files3.begin();
 	for (iterFile1=files1.begin();iterFile1!=files1.end();iterFile1++)
 	{
 
@@ -792,22 +789,24 @@ void HUandThickness()
 		strcpy(dst2,dir2.c_str());
 		strcpy(dst3,dir3.c_str());
 		RawImage test;
-		char dir3[200]="L:\\sdfdata2\\inner\\" ;
-		char dir4[200]="K:\\sdf\\volume\\clean\\clean\\ep\\clean\\";
-		char dir5[200]="L:\\sdfdata2\\people\\";
-		char dir6[200]="L:\\sdfdata2\\skeleton\\";
+		char dir3[200]="j:\\swfdata\\nocircle\\3041P\\" ;
+		char dir4[200]="K:\\sdf\\volume\\clean\\clean\\3041P\\";
+		char dir5[200]="j:\\swfdata\\nocircle\\3041P\\" ;
+		char dir6[200]="K:\\skeleton\\" ;
 		strcat(dir3,dst1);
 		strcat(dir4,dst2);
 		strcat(dir5,dst1);
 		strcat(dir6,dst3);
 		short*orgiondata=test.readStream(dir4,&l,&m,&n);
 		PIXTYPE * innerdata=test.readStreamfloat(dir3,&l,&m,&n);
-		PIXTYPE * skeletondata=test.readStreamfloat(dir6,&l,&m,&n);
+		unsigned char * skeletondata =new unsigned char[l*m*n];
+		test.readImage(skeletondata,dir6,l*m*n);
 		Raw src(l,m,n,innerdata);
 		float *inputo=new float[l*m*n];
 		for (int i = 0; i < l*m*n; i++)
 		{
-			inputo[i]=(float) orgiondata[i];		
+			inputo[i]=(float) orgiondata[i];	
+			skeletondata[i]=(float)skeletondata[i];
 		}
 		Raw *orgion = new Raw(l,m,n,inputo);
 		Raw *skeleton =new Raw(l,m,n,skeletondata); 
