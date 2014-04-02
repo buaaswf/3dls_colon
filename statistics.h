@@ -1,3 +1,6 @@
+#ifndef SWF_STATISTICS_H
+#define SWF_STATISTICS_H
+
 #include "vol_math_LevelSet.h"
 
 #include "test.h"
@@ -20,9 +23,13 @@
 #endif
 #define output "D:\\sdfdata\\" 
 #define output "D:\\sdfdata\\" 
-#define input1  "j:\\swfdata\\nocircle\\3041P\\"				//float
+#define input1  "L:\\sdfdata2\\3041P\\"				//float
 #define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\"		//short
-#define input3 "K:\\skeleton\\"   //unsigned char
+#define input3  "K:\\skeleton\\"   //unsigned char
+//#define input1  "F:\\data\\skeleton-edt\\"				//float
+//#define input2	"E:\\volume\\skeletono\\"		//short
+//#define input3 "F:\\data\\skeleton-s\\"   //unsigned char
+
 using namespace cimg_library;
 using namespace std;
 //////////////////////////////////////////////////////////////////////////
@@ -622,7 +629,7 @@ bool sign(PIXTYPE data)
 }
 PIXTYPE  biglittleedian(PIXTYPE  val)
 {
-	
+
 	PIXTYPE *q=&val;
 	unsigned char * p= (unsigned char*) q;
 	std::swap(p[0],p[3]);
@@ -749,7 +756,7 @@ Raw* thicknessequalHU(Raw *origion,Raw *thickness)
 	Raw *HU =new Raw(*origion);
 	for (int i=0;i<origion->size();i++)
 	{
-		if(thickness->getXYZ(i)==1)
+		if(thickness->getXYZ(i)!=0)
 			HU->putXYZ(i,origion->getXYZ(i));
 		else
 			HU->putXYZ(i,0);
@@ -782,38 +789,57 @@ void HUandThickness()
 		iterFile3->assign(iterFile3->substr(dir3.size()+1));
 		cout<<*iterFile1 <<endl;
 		cout<<*iterFile2 <<endl;
-		iterFile2++;
+		//iterFile2++;
 		int l=0,m=0,n=0;
 		char dst1[200],dst2[200],dst3[200];
-		strcpy(dst1,dir1.c_str()); //string-->char
-		strcpy(dst2,dir2.c_str());
-		strcpy(dst3,dir3.c_str());
+		strcpy(dst1,(*iterFile1).c_str()); //string-->char
+		strcpy(dst2,(*iterFile2).c_str());
+		strcpy(dst3,(*iterFile3).c_str());
 		RawImage test;
-		char dir3[200]="j:\\swfdata\\nocircle\\3041P\\" ;
-		char dir4[200]="K:\\sdf\\volume\\clean\\clean\\3041P\\";
-		char dir5[200]="j:\\swfdata\\nocircle\\3041P\\" ;
-		char dir6[200]="K:\\skeleton\\" ;
+		char dir3[200]=input1;
+		char dir4[200]=input2;
+		char dir5[200]=input1;
+		char dir6[200]=input3;
 		strcat(dir3,dst1);
 		strcat(dir4,dst2);
 		strcat(dir5,dst1);
 		strcat(dir6,dst3);
 		short*orgiondata=test.readStream(dir4,&l,&m,&n);
-		PIXTYPE * innerdata=test.readStreamfloat(dir3,&l,&m,&n);
+		PIXTYPE * innerdata=new PIXTYPE [l*m*n];
+		test.readImage2(innerdata,dir3,l*m*n);
 		unsigned char * skeletondata =new unsigned char[l*m*n];
 		test.readImage(skeletondata,dir6,l*m*n);
-		Raw src(l,m,n,innerdata);
+		
 		float *inputo=new float[l*m*n];
+		PIXTYPE *skeletondataF=new PIXTYPE[l*m*n];
+		PIXTYPE *innerdataF= new PIXTYPE[l*m*n];
+		PIXTYPE max=0,min=1000;
 		for (int i = 0; i < l*m*n; i++)
 		{
-			inputo[i]=(float) orgiondata[i];	
-			skeletondata[i]=(float)skeletondata[i];
+
+			PIXTYPE a=inputo[i]=(float) orgiondata[i]+1020;	
+			max > a?max=max:max=a; 
+			min < a? min =min:min=a;
+			PIXTYPE b=skeletondataF[i]=biglittleedian(float(skeletondata[i]));
+			//if (PIXTYPE c=innerdataF[i]=biglittleedian((float)innerdata[i]))
+			//{
+			//	cout <<"aaa"<<endl;
+			//}
+			PIXTYPE c=innerdataF[i]=biglittleedian((float)innerdata[i]);
 		}
+		cout <<max<<endl;
+		cout <<min <<endl;
+		delete []skeletondata;
+		delete []innerdata;
+		delete [] orgiondata;
+		Raw *thickness=new Raw(l,m,n,innerdataF,true);
 		Raw *orgion = new Raw(l,m,n,inputo);
-		Raw *skeleton =new Raw(l,m,n,skeletondata); 
-		Raw *hu=thicknessequalHU(orgion,&src);
+		Raw *skeleton =new Raw(l,m,n,skeletondataF); 
+		Raw *hu=thicknessequalHU(orgion,thickness);
 		DivideRegion(skeleton,hu);
-		DivideRegionthickness(skeleton,&src);
-		
+		DivideRegionthickness(skeleton,thickness);
+
 	}
 
 }
+#endif
