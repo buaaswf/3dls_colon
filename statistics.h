@@ -2,7 +2,7 @@
 #define SWF_STATISTICS_H
 
 #include "vol_math_LevelSet.h"
-
+#include <queue>
 #include "test.h"
 #include "DivideRegion.h"
 #include <iostream>
@@ -836,8 +836,13 @@ void HUandThickness()
 		Raw *orgion = new Raw(l,m,n,inputo);
 		Raw *skeleton =new Raw(l,m,n,skeletondataF); 
 		Raw *hu=thicknessequalHU(orgion,thickness);
-		DivideRegion(skeleton,hu);
-		DivideRegionthickness(skeleton,thickness);
+		queue<Point>q;
+		vector<Point> c;
+		
+		DivideRegion *dr=new DivideRegion(q,skeleton,c);
+		dr->putskletoninorder();
+		dr->DivideRegionv2(skeleton,hu);
+		dr->DivideRegionthicknessv2(skeleton,thickness);
 
 	}
 
