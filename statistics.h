@@ -23,7 +23,7 @@
 #endif
 #define output "D:\\sdfdata\\" 
 #define output "D:\\sdfdata\\" 
-#define input1  "L:\\sdfdata2\\3041P\\"				//float
+#define input1  "L:\\sdfdata2\\3041P\\"		//edt		//float
 #define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\"		//short
 #define input3  "K:\\skeleton\\"   //unsigned char
 //#define input1  "F:\\data\\skeleton-edt\\"				//float
