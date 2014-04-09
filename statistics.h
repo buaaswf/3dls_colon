@@ -21,11 +21,12 @@
 #else
 #include <dirent.h>
 #endif
-#define output "D:\\sdfdata\\" 
-#define output "D:\\sdfdata\\" 
-#define input1  "L:\\sdfdata2\\3041P\\"		//edt		//float
-#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\"		//short
-#define input3  "K:\\skeleton\\"   //unsigned char
+//#define output "D:\\sdfdata\\" 
+#define output "K:\\20140404\\" 
+#define input1  "L:\\sdfdata2\\edt\\"	//thickness uint8	//edt		//float
+#define input2   "K:\\sdf\\volume\\clean\\clean\\ep\\20140404\\"
+//#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\" //		//short
+#define input3  "K:\\skeleton\\"  //skeleton uint8 //unsigned char
 //#define input1  "F:\\data\\skeleton-edt\\"				//float
 //#define input2	"E:\\volume\\skeletono\\"		//short
 //#define input3 "F:\\data\\skeleton-s\\"   //unsigned char
@@ -98,7 +99,7 @@ void evaluate(string dir,int l,int m,int n)
 	strcat(dir2,dst);
 	char dir3[300];
 	strcpy(dir3,dir2);
-	strcat(dir3,"outer5-8_2.raw");
+	strcat(dir3,"outer5-8_2_20140405.raw");
 	float * indata1=test.readStreamfloat(dir3,&l,&m,&n);
 	char dir4[300];
 	strcpy(dir4,dir2);
@@ -132,12 +133,18 @@ void evaluate(string dir,int l,int m,int n)
 	FILE *p;
 	char dir5[300];
 	strcpy(dir5,dir2);
-	strcat(dir5,"thickness5-8_2.raw");
+	strcat(dir5,"thickness5-8_2_20140405.raw");
 	p=fopen(dir5,"wb");
-	fwrite(indata1,sizeof(PIXTYPE),l*m*n,p);
+	unsigned char * indata1char=new unsigned char[l*n*m];
+	for (int i=0;i< l*m*n;i++)
+	{
+		indata1char[i]=(unsigned char)indata1[i];
+	}
+	delete []indata1;
+	fwrite(indata1char,sizeof(unsigned char),l*m*n,p);
 	fclose(p);
 	fflush(stdout);
-	delete [] indata1;
+	delete [] indata1char;
 	delete [] indata2;
 
 }

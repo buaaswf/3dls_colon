@@ -239,10 +239,10 @@ void RawImage::writeImageName(Raw &destImg, char *name)
 				{
 					if (*val > 1)
 					{
-						*val = 100;  //change to 100 for roc computing *val=0; 
+						*val = 0;  //change to 100 for roc computing *val=0; 
 
 					}
-					else *val = 0; ////change to 0 for roc computing *val=100; 
+					else *val = 100; ////change to 0 for roc computing *val=100; 
 				}
 				else *val = 0;
 			}

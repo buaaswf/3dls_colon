@@ -51,6 +51,7 @@ void testcolon(int argc,string dir)
 	//input=f->guass3DFilter(input,3);
 	RawImage *write=new RawImage();
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
+	//20140405 delete because of the existance of 
 	ls->initialg(*input);
 	for (int i=0; i<input->getXsize(); i++)
 	{
@@ -71,13 +72,15 @@ void testcolon(int argc,string dir)
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 	char *outname1="inner5-8_2.raw";
 	char outdir[200]=output;
+
 	strcat(outdir,dirbody);
 	strcat(outdir,outname1);
+	//test.readImage2(initial->getdata(),outdir,l*m*n);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
+	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
 	//*initial -=temp;
-	char *outname2="autoouter5-8_2.raw";
+	char *outname2="outer5-8_2_20140405.raw";
 	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
 	strcat(outdir2,outname2);
@@ -281,24 +284,24 @@ void testhistgram()
 }
 int main(int argc,char **argv)
 {
-	//string dir2(input2);
-	//vector<string> files2;
-	//GetFileNameFromDir(dir2,files2);
-	//vector<string>::iterator iterFile2;
-	//for ( iterFile2 = files2.begin(); iterFile2 != files2.end(); iterFile2++ )
-	//{
+	string dir2(input2);
+	vector<string> files2;
+	GetFileNameFromDir(dir2,files2);
+	vector<string>::iterator iterFile2;
+	for ( iterFile2 = files2.begin()+7; iterFile2 != files2.end(); iterFile2++ )
+	{
 
-	//	
-	//	iterFile2->assign(iterFile2->substr(dir2.size()+1));
-	//	cout<<*iterFile2 <<endl;
-	//	//ddcircle(*iterFile);
-	//	//testcolon(argc,*iterFile2);
-	//	float2uchar(512,512,700,*iterFile2);
-	//	//testsesmic();
-	//	//thincknessstdv2(*iterFile2);
-	//	//roc(*iterFile2);
-	//}
-	testhistgram();
+		
+		iterFile2->assign(iterFile2->substr(dir2.size()+1));
+		cout<<*iterFile2 <<endl;
+		//ddcircle(*iterFile);
+		testcolon(argc,*iterFile2);
+		//float2uchar(512,512,700,*iterFile2);
+		//testsesmic();
+		//thincknessstdv2(*iterFile2);
+		//roc(*iterFile2);
+	}
+	//testhistgram();
 	//cout<<endl;
 	//roc3();
 	//threshold();
@@ -308,35 +311,3 @@ int main(int argc,char **argv)
 	system("pause");
 	return 0;
 }
-//void f(char *x)
-//{
-//	x++;
-//	*x='a';
-//}
-//char fun(char x,char y)
-//{
-//	if (x)
-//	{
-//		return y;
-//	}
-//}
-//int foo(int n)
-//{
-//	if (n<=2)
-//	{
-//		return n;
-//	}
-//	return foo(n-1)+foo(n-2);
-//}
-//int main()
-//{
-//	//char str[sizeof("hello")];
-//	//strcpy(str,"hello");
-//	//f(str);
-//	//cout <<str;
-//	//int a='0',b='1',c='2';
-//	//printf("%c\n",fun(fun(a,b),fun(b,c)));
-//	//cout <<foo(6);
-//	system("pause");
-//	return 0;
-//}
