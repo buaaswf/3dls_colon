@@ -25,7 +25,7 @@
 //using namespace std;
 
 
-void testcolon(int argc,string dir)
+void testcolon(int argc,string dir,int count)
 {
 	
 	char *pt="single_well";
@@ -78,8 +78,27 @@ void testcolon(int argc,string dir)
 	//test.readImage2(initial->getdata(),outdir,l*m*n);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwall(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
-	//*initial -=temp;
+	if (count %4==1)
+	{
+		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
+
+	}
+	else if (count %4==2)
+	{
+		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,20,pt);
+
+	}else if (count %4==3)
+	{
+		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,30,pt);
+
+	} 
+	else
+	{
+		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,40,pt);
+
+	}
+
+		//*initial -=temp;
 	char *outname2="outer5-8_2_20140405.raw";
 	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
@@ -288,14 +307,15 @@ int main(int argc,char **argv)
 	vector<string> files2;
 	GetFileNameFromDir(dir2,files2);
 	vector<string>::iterator iterFile2;
-	for ( iterFile2 = files2.begin()+7; iterFile2 != files2.end(); iterFile2++ )
+	int count=0;
+	for ( iterFile2 = files2.begin(); iterFile2 != files2.end(); iterFile2++ )
 	{
 
-		
+		count++;
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		testcolon(argc,*iterFile2);
+		testcolon(argc,*iterFile2,count);
 		//float2uchar(512,512,700,*iterFile2);
 		//testsesmic();
 		//thincknessstdv2(*iterFile2);

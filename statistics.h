@@ -22,7 +22,7 @@
 #include <dirent.h>
 #endif
 //#define output "D:\\sdfdata\\" 
-#define output "K:\\20140404\\" 
+#define output "K:\\20140411\\" 
 #define input1  "L:\\sdfdata2\\edt\\"	//thickness uint8	//edt		//float
 #define input2   "K:\\sdf\\volume\\clean\\clean\\ep\\20140404\\"
 //#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\" //		//short
