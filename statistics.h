@@ -22,9 +22,12 @@
 #include <dirent.h>
 #endif
 //#define output "D:\\sdfdata\\" 
-#define output "K:\\20140411\\" 
+//#define output "J:\\20140414\\" 
+#define output "D:\\swfdata20140420res\\"
 #define input1  "L:\\sdfdata2\\edt\\"	//thickness uint8	//edt		//float
-#define input2   "K:\\sdf\\volume\\clean\\clean\\ep\\20140404\\"
+//#define input2   "K:\\sdf\\volume\\clean\\clean\\ep\\20140414\\"
+//#define  input2 "D:\\segdata\\"
+#define input2 "D:\\swfdata20140420\\"
 //#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\" //		//short
 #define input3  "K:\\skeleton\\"  //skeleton uint8 //unsigned char
 //#define input1  "F:\\data\\skeleton-edt\\"				//float

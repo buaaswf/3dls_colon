@@ -25,7 +25,93 @@
 //using namespace std;
 
 
-void testcolon(int argc,string dir,int count)
+void testcolon2(int argc,string dir)
+{
+	
+	char *pt="single_well";
+	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=1;
+	RawImage test;
+	char dirhead[200]=input2;  //K:\\sdf\\volume\\clean\\clean\\ep\\
+
+	char dirbody[100];
+	strcpy(dirbody,dir.c_str());
+	cout <<"dirbody"<<dirbody<<endl;
+	strcat(dirhead,dirbody);
+	cout << "dirhead" << dirhead<< endl;
+	short * indata=test.readStream(dirhead,&l,&m,&n);
+	Raw *initial=new Raw(l,m,n);
+	float *inputo=new float[l*m*n];
+	for (int i = 0; i < l*m*n; i++)
+	{
+		inputo[i]=(float) indata[i];		
+	}
+
+	Raw *input=new Raw(l,m,n,inputo);
+	Filter *f=new Filter();
+	//input=f->guass3DFilter(input,3);
+	RawImage *write=new RawImage();
+	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
+	//20140405 delete because of the existance of 
+	//for (int i=0; i<input->getXsize(); i++)
+	//{
+	//	for (int j=0; j<input->getYsize(); j++)
+	//	{
+	//		for (int k=0; k<input->getZsize(); k++)
+	//		{
+	//			if (!((j-256)*(j-256)+(i-256)*(i-256) )<(200*200))
+	//			{
+	//				input->put(i,j,k,0);
+	//			}
+	//		}
+	//	}
+
+	//}
+	ls->initialg(*input);
+	for (int i=0; i<input->getXsize(); i++)
+	{
+		for (int j=0; j<input->getYsize(); j++)
+		{
+			for (int k=0; k<input->getZsize(); k++)
+			{
+				//if (((i-256)*(i-256)+(j-256)*(j-256) )<(200*200)) //swf change 180-->200
+				if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))
+					{
+					if (input->get(i,j,k)>=1)
+					{
+						initial->put(i,j,k,-2);
+					}
+					else initial->put(i,j,k,2);
+				}
+				else
+				{
+					 initial->put(i,j,k,0);
+				///< //////.
+				}
+
+
+			}
+		}
+
+	}
+	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
+	char *outname1="inner5-8_2.raw";
+	char outdir[200]=output;
+
+	strcat(outdir,dirbody);
+	strcat(outdir,outname1);
+	//test.readImage2(initial->getdata(),outdir,l*m*n);
+	test.writeImageName(*initial,outdir);//swf 20140430 change initial-->input
+	Raw temp(*initial);
+	ls->outerwall(*initial,*input,5.0,0.15,-3,1.5,1,10,pt);
+	//*initial -=temp;
+	char *outname2="outer5-8_2_20140405.raw";
+	char outdir2[200]=output;
+	strcat(outdir2,dirbody);
+	strcat(outdir2,outname2);
+	test.writeImageName(*initial,outdir2);
+	evaluate(dir,l,m,n);
+}
+void testcolon(int argc,string dir)
 {
 	
 	char *pt="single_well";
@@ -52,6 +138,20 @@ void testcolon(int argc,string dir,int count)
 	RawImage *write=new RawImage();
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
 	//20140405 delete because of the existance of 
+	//for (int i=0; i<input->getXsize(); i++)
+	//{
+	//	for (int j=0; j<input->getYsize(); j++)
+	//	{
+	//		for (int k=0; k<input->getZsize(); k++)
+	//		{
+	//			if (!((j-256)*(j-256)+(i-256)*(i-256) )<(200*200))
+	//			{
+	//				input->put(i,j,k,0);
+	//			}
+	//		}
+	//	}
+
+	//}
 	ls->initialg(*input);
 	for (int i=0; i<input->getXsize(); i++)
 	{
@@ -59,11 +159,21 @@ void testcolon(int argc,string dir,int count)
 		{
 			for (int k=0; k<input->getZsize(); k++)
 			{
-				if (input->get(i,j,k)>=1)
-				{
-					initial->put(i,j,k,-2);
+				if (((i-256)*(i-256)+(j-256)*(j-256) )<(200*200)) //swf change 180-->200
+				//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))
+					{
+					if (input->get(i,j,k)>=1)
+					{
+						initial->put(i,j,k,-2);
+					}
+					else initial->put(i,j,k,2);
 				}
-				else initial->put(i,j,k,2);
+				else
+				{
+					 initial->put(i,j,k,0);
+				///< //////.
+				}
+
 
 			}
 		}
@@ -76,29 +186,10 @@ void testcolon(int argc,string dir,int count)
 	strcat(outdir,dirbody);
 	strcat(outdir,outname1);
 	//test.readImage2(initial->getdata(),outdir,l*m*n);
-	test.writeImageName(*initial,outdir);
-	//Raw temp(*initial);
-	if (count %4==1)
-	{
-		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,10,pt);
-
-	}
-	else if (count %4==2)
-	{
-		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,20,pt);
-
-	}else if (count %4==3)
-	{
-		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,30,pt);
-
-	} 
-	else
-	{
-		ls->outerwallauto(*initial,*input,5.0,0.1,-3,1.5,1,40,pt);
-
-	}
-
-		//*initial -=temp;
+	test.writeImageName(*initial,outdir);//swf 20140430 change initial-->input
+	Raw temp(*initial);
+	ls->outerwall(*initial,*input,5.0,0.15,-3,1.5,1,10,pt);
+	//*initial -=temp;
 	char *outname2="outer5-8_2_20140405.raw";
 	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
@@ -307,15 +398,14 @@ int main(int argc,char **argv)
 	vector<string> files2;
 	GetFileNameFromDir(dir2,files2);
 	vector<string>::iterator iterFile2;
-	int count=0;
 	for ( iterFile2 = files2.begin(); iterFile2 != files2.end(); iterFile2++ )
 	{
 
-		count++;
+		
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		testcolon(argc,*iterFile2,count);
+		testcolon(argc,*iterFile2);
 		//float2uchar(512,512,700,*iterFile2);
 		//testsesmic();
 		//thincknessstdv2(*iterFile2);

@@ -335,9 +335,9 @@ void ThreeDim_LevelSet::outerwall(Raw &phi,Raw &g,double lambda,double mu,double
 	this->initialg(g);
 	Raw pull=outwallpull(phi);
 	this->initialg(pull);
-	for (int i=0; i < 2; i++)
+	for (int i=0; i < 5; i++)
 	{
-		phi = this->minimal_surface(phi,pull+g,lambda,mu,-10,epsilon,timestep,8,potentialFunction)+\
+		phi = this->minimal_surface(phi,pull+g,lambda,mu,-20,epsilon,timestep,8,potentialFunction)+\
 			this->minimal_surface(phi,g,lambda,mu,-alfa,epsilon,timestep,1,potentialFunction);
 
 		cout << "outer wall iter = " << i <<endl;
