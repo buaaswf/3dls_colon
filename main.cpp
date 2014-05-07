@@ -115,7 +115,7 @@ void testcolon(int argc,string dir)
 {
 	
 	char *pt="single_well";
-	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
+	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=1;
 	RawImage test;
 	char dirhead[200]=input2;  //K:\\sdf\\volume\\clean\\clean\\ep\\
 
@@ -159,7 +159,7 @@ void testcolon(int argc,string dir)
 		{
 			for (int k=0; k<input->getZsize(); k++)
 			{
-				if (((i-256)*(i-256)+(j-256)*(j-256) )<(200*200)) //swf change 180-->200
+				if (((i-256)*(i-256)+(j-256)*(j-256) )<(230*230)) //swf change 180-->200
 				//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))
 					{
 					if (input->get(i,j,k)>=1)
@@ -170,7 +170,7 @@ void testcolon(int argc,string dir)
 				}
 				else
 				{
-					 initial->put(i,j,k,0);
+					 initial->put(i,j,k,2);
 				///< //////.
 				}
 

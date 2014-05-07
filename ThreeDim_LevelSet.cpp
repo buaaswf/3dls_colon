@@ -335,9 +335,14 @@ void ThreeDim_LevelSet::outerwall(Raw &phi,Raw &g,double lambda,double mu,double
 	this->initialg(g);
 	Raw pull=outwallpull(phi);
 	this->initialg(pull);
+	//swf change the data 5 *(8 +1) to for speed up change alfa in the fist 
+	// this->minimal_surface(phi,pull+g,lambda,mu,-25,epsilon,timestep,8,potentialFunction)+\
+	//this->minimal_surface(phi,g,lambda,mu,-alfa,epsilon,timestep,1,potentialFunction);
+	// iter for change 5 -->1 5*8 t0 5*5
+
 	for (int i=0; i < 5; i++)
 	{
-		phi = this->minimal_surface(phi,pull+g,lambda,mu,-20,epsilon,timestep,8,potentialFunction)+\
+		phi = this->minimal_surface(phi,pull+g,lambda,mu,-35,epsilon,timestep,5,potentialFunction)+\
 			this->minimal_surface(phi,g,lambda,mu,-alfa,epsilon,timestep,1,potentialFunction);
 
 		cout << "outer wall iter = " << i <<endl;
