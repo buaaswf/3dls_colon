@@ -24,9 +24,13 @@
 //#define output "D:\\sdfdata\\" 
 //#define output "J:\\20140414\\" 
 #define output "D:\\swfdata20140420res\\"
-#define input1  "L:\\sdfdata2\\edt\\"	//thickness uint8	//edt		//float
+//#define input1  "L:\\sdfdata2\\edt\\"	//thickness uint8	//edt		//float
+#define input1  "L:\\sdfdata2\\inner\\"
+
 //#define input2   "K:\\sdf\\volume\\clean\\clean\\ep\\20140414\\"
-#define  input2 "D:\\segdata\\"
+//#define  input2 "K:\\sdf\\volume\\clean\\clean\\ep\\clean\\"
+#define input2 "E:\\volume\\segmention\\rate\\"
+//"D:\\20140511aotuo\\"
 //#define input2 "D:\\swfdata20140420\\"
 //#define input2	"K:\\sdf\\volume\\clean\\clean\\3041P\\" //		//short
 #define input3  "K:\\skeleton\\"  //skeleton uint8 //unsigned char
@@ -307,8 +311,8 @@ void roc()
 		cout<<*iterFile1 <<endl;
 		cout<<*iterFile2 <<endl;
 		//pvalue(*iterFile1,*iterFile2);
-		
-		//rocwayinner2people(*iterFile1,*iterFile2);
+
+		rocwayinner2people(*iterFile1,*iterFile2);
 		iterFile2++;
 		//ddcircle(*iterFile);
 		//testcolon(argc,*iterFile);
@@ -655,7 +659,7 @@ void rocwayinner2people(string dir1, string dir2)
 	RawImage test;
 	char dir3[200]="L:\\sdfdata2\\inner\\" ;
 	char dir4[200]="K:\\sdf\\volume\\clean\\clean\\ep\\clean\\";
-	char dir5[200]="L:\\sdfdata2\\people\\";
+	char dir5[200]="D:\\segdata\\people\\";
 	strcat(dir3,dst1);
 	strcat(dir4,dst2);
 	strcat(dir5,dst1);
