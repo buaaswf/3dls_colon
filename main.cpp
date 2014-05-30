@@ -2,7 +2,7 @@
 #include "vol_math_LevelSet.h"
 #include "statistics.h"
 #include "test.h"
-//#include "ProcessDirty.h"
+#include "ProcessDirty.h"
 //#include <iostream>
 //#include <crtdbg.h> 
 //#include "CImg.h" 
@@ -31,7 +31,7 @@ void testcolon(int argc,string dir)
 {
 	
 	char *pt="single_well";
-	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=1;
+	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
 	RawImage test;
 	char dirhead[200]=input2;  //K:\\sdf\\volume\\clean\\clean\\ep\\
 
@@ -81,20 +81,98 @@ void testcolon(int argc,string dir)
 	//test.readImage2(initial->getdata(),outdir,l*m*n);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwall(*initial,*input,10,0.1,-6,1.5,1,10,pt);
-	for (int i=0;i<initial->size();i++)
+	ls->outerwall(*initial,*input,5,0.1,-3,1.5,1,10,pt);
+	PIXTYPE *data= initial->getdata();
+	for (int i=0;i<initial->getZsize();i++)
 	{
-		if (initial->getXYZ(i)>1 && (indata[i] <-924 || indata[i]>-124))
+		for (int j=0;j<initial->getYsize();j++)
 		{
-			initial->putXYZ(i,0);
+			for (int k=0;k<initial->getXsize();k++)
+			{
+				PIXTYPE *val = &data[i*initial->getXsize()*initial->getYsize()+j*initial->getXsize()+k];
+				//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))//k<409 && k> 107 && j>156 &&j <390
+				if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
+				{
+					if (*val > 1)
+					{
+						*val = 0;  //change to 100 for roc computing *val=0; 
+
+					}
+					else *val = 100; ////change to 0 for roc computing *val=100; 
+				}
+				else *val = 0;
+			}
 		}
 	}
+	int count=0;
+	//for (int i=0;i<initial->size();i++)
+	//{
+	//	
+	//
+	//	if (initial->getXYZ(i)==100 &&  indata[i]>=-124)
+	//	{
+	//		count++;
+	//		initial->putXYZ(i,0);
+	//	}
+	//}
+	/*for (int i=2; i<initial->getZsize()-2; i++)
+	{
+		for (int j=2; j<initial->getYsize()-2; j++)
+		{
+			for (int k=2; k<initial->getXsize()-2; k++)
+			{
+				int halfsize=2;
+				int countneighbour=0;
+				short val= indata[i*initial->getYsize()*initial->getXsize()+j*initial->getXsize()+k];
+				for (int l=i-halfsize;l<i+halfsize;l++)
+				{
+					for (int m=j-halfsize; m<j+halfsize;m++)
+					{
+						for (int n=k-halfsize; n<k+halfsize;n++)
+						{
+							if (indata[l*initial->getYsize()*initial->getXsize()+m*initial->getXsize()+n]<-500)
+							{
+								countneighbour++;
+							}
+						}
+					}
+				}
+				if (countneighbour>10 &&initial->get(k,j,i)==100 &&  val>-100)
+				{
+					initial->put(k,j,i,0);
+				
+				}
+			}
+		}
+	}
+	cout <<"======="<<count<<endl;*/
+	//for (int i=0;i<initial->getZsize();i++)
+	//{
+	//	for (int j=0;j<initial->getYsize();j++)
+	//	{
+	//		for (int k=0;k<initial->getXsize();k++)
+	//		{
+	//			PIXTYPE *val = &data[i*initial->getXsize()*initial->getYsize()+j*initial->getXsize()+k];
+	//			//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))//k<409 && k> 107 && j>156 &&j <390
+	//			if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
+	//			{
+	//				if (*val > 1)
+	//				{
+	//					*val = 100;  //change to 100 for roc computing *val=0; 
+
+	//				}
+	//				else *val = 0; ////change to 0 for roc computing *val=100; 
+	//			}
+	//			else *val = 0;
+	//		}
+	//	}
+	//}
 	//*initial -=temp;
 	char *outname2="outer5-8_2_20140405.raw";
 	char outdir2[200]=output;
 	strcat(outdir2,dirbody);
 	strcat(outdir2,outname2);
-	test.writeImageName(*initial,outdir2);
+	test.writeImageNameNoCircle(*initial,outdir2);
 	evaluate(dir,l,m,n);
 }
 void testcolontest()
@@ -321,12 +399,12 @@ int main(int argc,char **argv)
 		iterFile2->assign(iterFile2->substr(dir2.size()+1));
 		cout<<*iterFile2 <<endl;
 		//ddcircle(*iterFile);
-		//testcolon(argc,*iterFile2);
+		testcolon(argc,*iterFile2);
 		//float2uchar(512,512,700,*iterFile2);
 		//testsesmic();
 		//thincknessstdv2(*iterFile2);
 		//roc(*iterFile2);
-		rate(argc,*iterFile2);
+		//rate(argc,*iterFile2);
 	}
 	//testhistgram();
 	//test();//delete dirty success

@@ -40,6 +40,7 @@ public:
 	void writeImage(Raw& destImg);
 	void writeImagesesmic(Raw &destImg);
 	void writeImageName(Raw &destImg, char *name);
+	void writeImageNameNoCircle(Raw &destImg, char *name);
 	void readImage2(float * buf,char const *file ,int size);
 	float * buf2float(unsigned char *buf);
 	void save();
