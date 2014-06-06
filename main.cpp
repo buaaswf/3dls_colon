@@ -55,13 +55,31 @@ void testcolon(int argc,string dir)
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
 	//20140405 delete because of the existance of 
 	ls->initialg(*input);
+	//for (int i=0; i<input->getXsize(); i++)
+	//{
+	//	for (int j=0; j<input->getYsize(); j++)
+	//	{
+	//		for (int k=0; k<input->getZsize(); k++)
+	//		{
+	//			if (input->get(i,j,k)>=1)
+	//			{
+	//				initial->put(i,j,k,-2);
+	//			}
+	//			else initial->put(i,j,k,2);
+
+	//		}
+	//	}
+
+	//}
+	int R=115;
 	for (int i=0; i<input->getXsize(); i++)
 	{
 		for (int j=0; j<input->getYsize(); j++)
 		{
 			for (int k=0; k<input->getZsize(); k++)
 			{
-				if (input->get(i,j,k)>=1)
+				if ((i-l/4)*(i-l/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R||
+					(i-l*3/4)*(i-l*3/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R)
 				{
 					initial->put(i,j,k,-2);
 				}
@@ -81,7 +99,7 @@ void testcolon(int argc,string dir)
 	//test.readImage2(initial->getdata(),outdir,l*m*n);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwall(*initial,*input,5,0.1,-3,1.5,1,10,pt);
+	ls->outerwallauto(*initial,*input,5,0.1,-3,1.5,1,10,pt);
 	PIXTYPE *data= initial->getdata();
 	for (int i=0;i<initial->getZsize();i++)
 	{
@@ -91,16 +109,16 @@ void testcolon(int argc,string dir)
 			{
 				PIXTYPE *val = &data[i*initial->getXsize()*initial->getYsize()+j*initial->getXsize()+k];
 				//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))//k<409 && k> 107 && j>156 &&j <390
-				if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
-				{
-					if (*val > 1)
+				//if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
+				//{
+					if (*val >1)
 					{
 						*val = 0;  //change to 100 for roc computing *val=0; 
 
 					}
 					else *val = 100; ////change to 0 for roc computing *val=100; 
-				}
-				else *val = 0;
+				//}
+				//else *val = 0;
 			}
 		}
 	}
