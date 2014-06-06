@@ -240,16 +240,16 @@ void RawImage::writeImageName(Raw &destImg, char *name)
 			{
 				PIXTYPE *val = &data[i*destImg.getXsize()*destImg.getYsize()+j*destImg.getXsize()+k];
 				//if (((k-256)*(k-256)*150*150+(j-256)*(j-256)*160*160 )<(150*150*160*160))//k<409 && k> 107 && j>156 &&j <390
-				if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
-				{
+				//if (((k-256)*(k-256)+(j-256)*(j-256) )<(230*230))//k<409 && k> 107 && j>156 &&j <390
+				//{
 					if (*val > 1)
 					{
 						*val = 0;  //change to 100 for roc computing *val=0; 
 
 					}
 					else *val = 100; ////change to 0 for roc computing *val=100; 
-				}
-				else *val = 0;
+				//}
+				//else *val = 0;
 			}
 		}
 	}
