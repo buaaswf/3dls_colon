@@ -3,6 +3,7 @@
 #include "statistics.h"
 #include "test.h"
 #include "ProcessDirty.h"
+#include"initial.h"
 //#include <iostream>
 //#include <crtdbg.h> 
 //#include "CImg.h" 
@@ -31,7 +32,7 @@ void testcolon(int argc,string dir)
 {
 	
 	char *pt="single_well";
-	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=10;
+	int l=0,m=0,n=0,l1=0,l2=0,iter_outer=1;
 	RawImage test;
 	char dirhead[200]=input2;  //K:\\sdf\\volume\\clean\\clean\\ep\\
 
@@ -55,31 +56,14 @@ void testcolon(int argc,string dir)
 	ThreeDim_LevelSet *ls=new ThreeDim_LevelSet();
 	//20140405 delete because of the existance of 
 	ls->initialg(*input);
-	//for (int i=0; i<input->getXsize(); i++)
-	//{
-	//	for (int j=0; j<input->getYsize(); j++)
-	//	{
-	//		for (int k=0; k<input->getZsize(); k++)
-	//		{
-	//			if (input->get(i,j,k)>=1)
-	//			{
-	//				initial->put(i,j,k,-2);
-	//			}
-	//			else initial->put(i,j,k,2);
-
-	//		}
-	//	}
-
-	//}
-	int R=115;
-	for (int i=0; i<input->getXsize(); i++)
+	Raw *initialdata=initialsimplycolon(l,m,n);
+	for (int i=0; i<initialdata->getXsize(); i++)
 	{
-		for (int j=0; j<input->getYsize(); j++)
+		for (int j=0; j<initialdata->getYsize(); j++)
 		{
-			for (int k=0; k<input->getZsize(); k++)
+			for (int k=0; k<initialdata->getZsize(); k++)
 			{
-				if ((i-l/4)*(i-l/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R||
-					(i-l*3/4)*(i-l*3/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R)
+				if (initialdata->get(i,j,k)>=1)
 				{
 					initial->put(i,j,k,-2);
 				}
@@ -89,6 +73,24 @@ void testcolon(int argc,string dir)
 		}
 
 	}
+	//int R=115;
+	//for (int i=0; i<input->getXsize(); i++)
+	//{
+	//	for (int j=0; j<input->getYsize(); j++)
+	//	{
+	//		for (int k=0; k<input->getZsize(); k++)
+	//		{
+	//			if ((i-l/4)*(i-l/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R||
+	//				(i-l*3/4)*(i-l*3/4) + (j-m*2/4)*(j-m*2/4) + (k-n/2)*(k-n/2)  < R*R)
+	//			{
+	//				initial->put(i,j,k,-2);
+	//			}
+	//			else initial->put(i,j,k,2);
+
+	//		}
+	//	}
+
+	//}
 	*initial=ls->minimal_surface(*initial,*input,5.0,0.1,-3,1.5,1,iter_outer,pt);
 
 	char *outname1="inner5-8_2.raw";
@@ -99,7 +101,7 @@ void testcolon(int argc,string dir)
 	//test.readImage2(initial->getdata(),outdir,l*m*n);
 	test.writeImageName(*initial,outdir);
 	//Raw temp(*initial);
-	ls->outerwallauto(*initial,*input,5,0.1,-3,1.5,1,10,pt);
+	ls->outerwall(*initial,*input,5,0.1,-3,1.5,1,10,pt);
 	PIXTYPE *data= initial->getdata();
 	for (int i=0;i<initial->getZsize();i++)
 	{

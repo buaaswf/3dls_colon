@@ -112,6 +112,7 @@
     <ClInclude Include="..\DivideRegion.h" />
     <ClInclude Include="..\Filter.h" />
     <ClInclude Include="..\image.h" />
+    <ClInclude Include="..\initial.h" />
     <ClInclude Include="..\Resource.h" />
     <ClInclude Include="..\statistics.h" />
     <ClInclude Include="..\test.h" />
